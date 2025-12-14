@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Chat - February 2024</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #3b4a54;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background-color: #111b21;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .chat-header {
+            background-color: #202c33;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #6a7175;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .chat-info h2 {
+            color: #e9edef;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .chat-info p {
+            color: #8696a0;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23121d25' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-color: #0b141a;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            max-width: 65%;
+        }
+        
+        .message.mariusz {
+            align-items: flex-end;
+            margin-left: auto;
+        }
+        
+        .message.ula {
+            align-items: flex-start;
+        }
+        
+        .message-bubble {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            position: relative;
+            font-size: 14.5px;
+            line-height: 1.4;
+        }
+        
+        .message.mariusz .message-bubble {
+            background-color: #005c4b;
+            color: #e9edef;
+            border-top-right-radius: 2px;
+        }
+        
+        .message.ula .message-bubble {
+            background-color: #202c33;
+            color: #e9edef;
+            border-top-left-radius: 2px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: #8696a0;
+            margin: 0 5px 5px;
+            align-self: flex-end;
+        }
+        
+        .message-sender {
+            font-size: 13px;
+            color: #8696a0;
+            margin-bottom: 4px;
+            padding-left: 5px;
+        }
+        
+        .media-message {
+            font-style: italic;
+            color: #8696a0;
+        }
+        
+        .date-separator {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .date-separator span {
+            background-color: #182229;
+            color: #8696a0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12.5px;
+        }
+        
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #0b141a;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #374248;
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #8696a0;
+        }
+        
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 95vh;
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="avatar">WC</div>
+            <div class="chat-info">
+                <h2>Ula Cholewińska & Mariusz</h2>
+                <p>WhatsApp Chat • February 2024</p>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Chat data
+        const februaryMessages = [
+            { date: '25/02/2024', time: '08:44', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+            { date: '25/02/2024', time: '12:16', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+            { date: '25/02/2024', time: '12:56', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+            { date: '25/02/2024', time: '13:06', sender: 'Ula Cholewińska', content: 'Aha ok' },
+            { date: '25/02/2024', time: '13:14', sender: 'mariuszjunker2019', content: 'I\'m sorry, but I preferred to write right away' },
+            { date: '25/02/2024', time: '14:58', sender: 'Ula Cholewińska', content: 'Nadia told me you wrote to her. But I didn\'t have the energy to reply. She\'s had a 40-degree fever non-stop since yesterday. I\'m taking her to the doctor tomorrow' },
+            { date: '25/02/2024', time: '15:09', sender: 'mariuszjunker2019', content: 'Yes, that\'s fine, let the poor thing get well' },
+            { date: '25/02/2024', time: '15:10', sender: 'mariuszjunker2019', content: 'Is she feeling any better?' },
+            { date: '25/02/2024', time: '15:10', sender: 'Ula Cholewińska', content: 'No, it\'s the same all the time' },
+            { date: '25/02/2024', time: '15:10', sender: 'Ula Cholewińska', content: 'High fever all the time' },
+            { date: '25/02/2024', time: '15:52', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+            { date: '25/02/2024', time: '15:52', sender: 'Ula Cholewińska', content: 'It came out awesome, I recommend' },
+            { date: '25/02/2024', time: '17:19', sender: 'mariuszjunker2019', content: 'I haven\'t even eaten today' },
+            { date: '26/02/2024', time: '11:59', sender: 'Ula Cholewińska', content: 'Nadia and Natasha got antibiotics today' },
+            { date: '26/02/2024', time: '13:36', sender: 'Ula Cholewińska', content: 'Natashka is sleeping' },
+            { date: '26/02/2024', time: '13:36', sender: 'Ula Cholewińska', content: 'And I\'m lying next to Nadia' },
+            { date: '26/02/2024', time: '13:37', sender: 'mariuszjunker2019', content: 'Ok, give her a kiss and wish her lots of health. I\'ll call later' },
+            { date: '26/02/2024', time: '17:02', sender: 'mariuszjunker2019', content: 'Do you want me to drop by, and if you agree, I\'ll stay and leave tomorrow morning' },
+            { date: '26/02/2024', time: '17:02', sender: 'mariuszjunker2019', content: 'I had an easy day at work' },
+            { date: '26/02/2024', time: '17:05', sender: 'Ula Cholewińska', content: 'You could drop by, but honestly, Natasha comes into my bed at night, so you don\'t even have a place to sleep. And when the girls fall asleep, I want total silence because I want to rest too, as I haven\'t had a moment of rest or sleep for a few days. :/ I\'m mega exhausted.' },
+            { date: '26/02/2024', time: '17:05', sender: 'Ula Cholewińska', content: 'So you decide' },
+            { date: '26/02/2024', time: '17:05', sender: 'mariuszjunker2019', content: 'Your floor, I\'ll manage' },
+            { date: '26/02/2024', time: '17:06', sender: 'mariuszjunker2019', content: 'And I\'ll be quiet' },
+            { date: '26/02/2024', time: '17:06', sender: 'Ula Cholewińska', content: 'And could you buy about 6 eggs somewhere? I walked today with the girls to both a local shop and Tesco because there was no milk anywhere, but the poor things were crying... and I\'d had enough. Now Nadia is lively and wants to try making pasta, but I only have 2 eggs.' },
+            { date: '26/02/2024', time: '17:07', sender: 'mariuszjunker2019', content: 'Sure, I\'ll buy them' },
+            { date: '26/02/2024', time: '17:35', sender: 'mariuszjunker2019', content: 'The 268 is coming soon, yippee' },
+            { date: '26/02/2024', time: '17:41', sender: 'mariuszjunker2019', content: 'I just left' },
+            { date: '26/02/2024', time: '17:42', sender: 'Ula Cholewińska', content: 'Oki' },
+            { date: '26/02/2024', time: '18:12', sender: 'mariuszjunker2019', content: 'Only eggs?' },
+            { date: '26/02/2024', time: '18:13', sender: 'Ula Cholewińska', content: 'Yes' },
+            { date: '26/02/2024', time: '18:13', sender: 'mariuszjunker2019', content: 'Oki' },
+            { date: '26/02/2024', time: '18:23', sender: 'mariuszjunker2019', content: 'I\'ll have a smoke and come in' },
+            { date: '26/02/2024', time: '20:22', sender: 'mariuszjunker2019', content: 'Stop cursing at me. If things are hard for you, just write like a normal person. I\'ve always helped you and I will help you. You don\'t even see how you\'re behaving. I\'m not blind, I see it\'s hard for you, but with an attitude like today, nothing will improve. If you want to talk or need help, I\'m always up for it. I don\'t care how you talk to me, blaming me for everything. For all I care, we don\'t have to talk if this is how it\'s going to be. I\'m coming to see my daughter, you have no idea how much I miss her. And this "weekend dad" thing... you have no other plan than to blame me. What do you expect? I want to see the girls, and you start on about some junkie and the same old story. You\'re taking away our moments together. We are not a couple, so why are you talking about the past? You want support, but look how you behave. I\'m supposed to be a shoulder to cry on, just to get an earful from you. You won\'t even sit down and talk, you just fly off the handle. If that\'s how you want to live, it\'s your choice. Don\'t expect things to get better. I know you\'ve had worse days lately, I can feel it. I know you, Ula. I see you\'re struggling. You\'re managing, yes, but you\'re going to exhaust yourself. I feel for you. Open up, or start talking to me normally. I\'m not forcing you, you have to want it yourself. I don\'t need this drama, our whole family loses. But I\'m not here to tell you what to do. I\'m not turning my back on you, and yet you act like this. For me, every moment with you all is precious, but everything has its limits. I hope you understand. This isn\'t the first time I\'m saying this, and it doesn\'t make me happy at all.' },
+            { date: '26/02/2024', time: '20:38', sender: 'mariuszjunker2019', content: 'And don\'t go back to what was, think about what will be. Nothing by force, you know that. I want to see you all, but I have a life to live afterwards, and making scenes won\'t achieve anything.' },
+            { date: '26/02/2024', time: '20:39', sender: 'mariuszjunker2019', content: 'And listen, I\'ve been going through some crazy shit for weeks and I haven\'t told anyone.' },
+            { date: '26/02/2024', time: '20:39', sender: 'Ula Cholewińska', content: 'Ok. But give me a break today and let it go because I don\'t even have the strength for these messages.' },
+            { date: '26/02/2024', time: '20:39', sender: 'mariuszjunker2019', content: 'I just got home and...' },
+            { date: '26/02/2024', time: '20:39', sender: 'mariuszjunker2019', content: 'A scene.' },
+            { date: '26/02/2024', time: '20:40', sender: 'mariuszjunker2019', content: 'I have to move out. I said I\'ll do it as soon as I can.' },
+            { date: '26/02/2024', time: '20:46', sender: 'mariuszjunker2019', content: 'I get paid in 2 weeks. Think about whether I can stay with you for a while. Of course, I\'ll pay. I would have packed up and left today. Don\'t answer now, I need a month at most, nothing more.' },
+            { date: '26/02/2024', time: '20:47', sender: 'mariuszjunker2019', content: 'I\'m going for a smoke to cool down, I even feel sorry for Paweł.' },
+            { date: '27/02/2024', time: '07:39', sender: 'mariuszjunker2019', content: 'Hey, they apologized. I really let loose on both of them for how they behaved, Ula. Maybe they finally understood something because it\'s been over the top for weeks. My head is splitting from yesterday\'s stress, I threw up at 2 am. Have a nice day.' },
+            { date: '27/02/2024', time: '18:40', sender: 'mariuszjunker2019', content: 'I just got on the 268. Do you want me to come and stay, or another time?' },
+            { date: '28/02/2024', time: '19:31', sender: 'mariuszjunker2019', content: 'I\'ll drop by tomorrow after work to see Natasha for an hour, or maybe until 8 pm at the latest, and then I\'ll go. I hope my little treasures are feeling better.' },
+            { date: '28/02/2024', time: '21:30', sender: 'Ula Cholewińska', content: 'An hour should be enough. Unfortunately, they are not feeling better.' },
+            { date: '28/02/2024', time: '21:32', sender: 'mariuszjunker2019', content: 'Then just for an hour. I hope they get well.' },
+            { date: '28/02/2024', time: '22:13', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+            { date: '28/02/2024', time: '22:17', sender: 'mariuszjunker2019', content: 'Maybe she\'ll fall asleep soon, but from what I see, it doesn\'t look like it. Kisses for the girls, goodnight.' },
+            { date: '29/02/2024', time: '17:36', sender: 'mariuszjunker2019', content: 'Ula, I\'m just at the stop, but they dropped me off in a different place, so I have to take another bus. It\'s far to the center for the 268, I\'m taking the 283 from near work, so I\'ll just go straight home. I\'ll come tomorrow.' },
+            { date: '29/02/2024', time: '17:39', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+            { date: '29/02/2024', time: '17:44', sender: 'mariuszjunker2019', content: 'I\'ll be there at 18:30, maybe 18:35. There\'s a 255 bus, cool. I checked on Movit, not Arriva.' },
+            { date: '29/02/2024', time: '17:51', sender: 'Ula Cholewińska', content: 'Where will you be at 18:30? I\'m confused.' },
+            { date: '29/02/2024', time: '17:51', sender: 'mariuszjunker2019', content: 'At your place.' },
+            { date: '29/02/2024', time: '17:52', sender: 'mariuszjunker2019', content: 'Maybe 18:35.' },
+            { date: '29/02/2024', time: '17:53', sender: 'Ula Cholewińska', content: 'Natasha is sleeping for now.' },
+            { date: '29/02/2024', time: '17:55', sender: 'mariuszjunker2019', content: 'Ok, then I won\'t come.' },
+            { date: '29/02/2024', time: '18:00', sender: 'Ula Cholewińska', content: 'She just woke up.' },
+            { date: '29/02/2024', time: '18:02', sender: 'mariuszjunker2019', content: 'Well, I\'m sorry, but the bus already passed the stop where I was supposed to get off, so I can\'t make it anymore.' },
+            { date: '29/02/2024', time: '18:03', sender: 'Ula Cholewińska', content: 'You\'re clearly messing with me, for fuck\'s sake.' },
+            { date: '29/02/2024', time: '18:03', sender: 'mariuszjunker2019', content: 'I\'m not.' },
+            { date: '29/02/2024', time: '18:09', sender: 'mariuszjunker2019', content: 'I can\'t, I wrote that I passed the stop, nothing I can do. You wrote she was sleeping. I\'ll come tomorrow, I\'m not messing around.' },
+            { date: '29/02/2024', time: '18:13', sender: 'Ula Cholewińska', content: 'No, you will not come tomorrow! What do you think? That you can just keep changing your mind at the last minute because you suddenly have other plans? Have some respect for the children! I will tell you when you can come.' },
+            { date: '29/02/2024', time: '18:13', sender: 'Ula Cholewińska', content: 'And I advise you not to cancel at the last minute next time!' },
+            { date: '29/02/2024', time: '18:23', sender: 'mariuszjunker2019', content: 'Unbelievable. I wrote to you, what don\'t you understand? What "forever"? Do you understand what I wrote? I don\'t have the bus schedule memorized. As soon as I saw I could make it, I messaged you. I don\'t want to argue. I want to see them and I am respectful, but you jump on me. What, should I graciously wait until Ula allows me to see the children? You want a scene? Wow, you win. I\'m not listening to this. I\'ll be there tomorrow after work for an hour or two. It\'s not worth it, Ula, really.' },
+            { date: '29/02/2024', time: '18:24', sender: 'mariuszjunker2019', content: 'If you want, I can go to Dewsbury and come from there, no problem. If you think I don\'t want to come. I can go later or I can stay over, no problem.' },
+            { date: '29/02/2024', time: '18:26', sender: 'mariuszjunker2019', content: 'I\'ll be in Dewsbury in about 15 minutes and if you agree, I\'ll come, really.' },
+            { date: '29/02/2024', time: '19:27', sender: 'mariuszjunker2019', content: 'What the hell is wrong with you???? Ula, you won\'t listen to anything. The way you talk, "I need to grow up"... such anger from you. How do you expect to get along with an attitude like that? I prefer to find a solution. I\'m speechless, I don\'t recognize you. I won\'t force it if you don\'t want to talk. It\'s a shame I can\'t count on you like you can on me. I don\'t cause you any problems, but look how you behave. Zero understanding. It\'s very, very sad for me, and you probably don\'t even care, judging by your behavior. I even wanted to come from Dewsbury, but you preferred to hang up. It\'s always like that.' },
+            { date: '29/02/2024', time: '19:27', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+            { date: '29/02/2024', time: '19:30', sender: 'mariuszjunker2019', content: 'I\'m still waiting for the bus home, I don\'t even have money for a taxi. Do you think I didn\'t want to be with Natasha? You have no idea how I feel. I won\'t complain, because you\'ll just attack me, as usual.' },
+            { date: '29/02/2024', time: '19:36', sender: 'mariuszjunker2019', content: 'Do you even care if I see Natasha? All it would have taken was a normal conversation. That\'s not so much to ask.' },
+            { date: '29/02/2024', time: '19:37', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+            { date: '29/02/2024', time: '20:17', sender: 'mariuszjunker2019', content: 'I just got the bus now.' }
+        ];
+
+        // Function to render messages
+        function renderMessages() {
+            const chatContainer = document.getElementById('chatMessages');
+            let currentDate = '';
+            
+            februaryMessages.forEach(message => {
+                // Skip media-only messages
+                if (message.media && !message.content) return;
+                
+                // Add date separator if date changed
+                if (message.date !== currentDate) {
+                    currentDate = message.date;
+                    const dateSeparator = document.createElement('div');
+                    dateSeparator.className = 'date-separator';
+                    dateSeparator.innerHTML = `<span>${formatDate(message.date)}</span>`;
+                    chatContainer.appendChild(dateSeparator);
+                }
+                
+                // Create message element
+                const messageEl = document.createElement('div');
+                const senderClass = message.sender === 'mariuszjunker2019' ? 'mariusz' : 'ula';
+                messageEl.className = `message ${senderClass}`;
+                
+                // Add sender name for Ula's messages
+                let senderHtml = '';
+                if (senderClass === 'ula') {
+                    senderHtml = `<div class="message-sender">${message.sender}</div>`;
+                }
+                
+                // Add message content
+                let contentHtml = '';
+                if (message.content) {
+                    contentHtml = `<div class="message-bubble">${message.content}</div>`;
+                } else if (message.media) {
+                    contentHtml = `<div class="message-bubble media-message">${message.media}</div>`;
+                }
+                
+                messageEl.innerHTML = `
+                    ${senderHtml}
+                    ${contentHtml}
+                    <div class="message-time">${message.time}</div>
+                `;
+                
+                chatContainer.appendChild(messageEl);
+            });
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Format date to be more readable
+        function formatDate(dateString) {
+            const parts = dateString.split('/');
+            const day = parts[0];
+            const month = parts[1];
+            const year = parts[2];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return `${day} ${monthNames[parseInt(month) - 1]} ${year}`;
+        }
+        
+        // Initialize chat when page loads
+        window.onload = renderMessages;
+    </script>
+</body>
+</html>

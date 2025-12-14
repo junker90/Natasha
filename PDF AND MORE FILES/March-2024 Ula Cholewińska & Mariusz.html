@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Chat - March 2024</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #3b4a54;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .chat-container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background-color: #111b21;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .chat-header {
+            background-color: #202c33;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #6a7175;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .chat-info h2 {
+            color: #e9edef;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .chat-info p {
+            color: #8696a0;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23121d25' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-color: #0b141a;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            max-width: 65%;
+        }
+        
+        .message.mariusz {
+            align-items: flex-end;
+            margin-left: auto;
+        }
+        
+        .message.ula {
+            align-items: flex-start;
+        }
+        
+        .message-bubble {
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 2px;
+            position: relative;
+            font-size: 14.5px;
+            line-height: 1.4;
+        }
+        
+        .message.mariusz .message-bubble {
+            background-color: #005c4b;
+            color: #e9edef;
+            border-top-right-radius: 2px;
+        }
+        
+        .message.ula .message-bubble {
+            background-color: #202c33;
+            color: #e9edef;
+            border-top-left-radius: 2px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: #8696a0;
+            margin: 0 5px 5px;
+            align-self: flex-end;
+        }
+        
+        .message-sender {
+            font-size: 13px;
+            color: #8696a0;
+            margin-bottom: 4px;
+            padding-left: 5px;
+        }
+        
+        .media-message {
+            font-style: italic;
+            color: #8696a0;
+        }
+        
+        .date-separator {
+            text-align: center;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        .date-separator span {
+            background-color: #182229;
+            color: #8696a0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12.5px;
+        }
+        
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #0b141a;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #374248;
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #8696a0;
+        }
+        
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 95vh;
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="avatar">WC</div>
+            <div class="chat-info">
+                <h2>Ula Cholewińska & Mariusz</h2>
+                <p>WhatsApp Chat • March 2024</p>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Chat data for March 2024
+        const marchMessages = [
+  { date: '01/03/2024', time: '17:31', sender: 'mariuszjunker2019', content: 'So can I drop by or not? I\'m on the bus, I\'ll be in Cleckheaton in about 20 minutes.' },
+  { date: '01/03/2024', time: '17:46', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '01/03/2024', time: '22:41', sender: 'mariuszjunker2019', content: 'Since you didn\'t write to say I should come tomorrow, let me know if I can come on Sunday and what times work for you. I have the whole Sunday free.' },
+  { date: '01/03/2024', time: '23:11', sender: 'Ula Cholewińska', content: 'I\'ll let you know tomorrow.' },
+  { date: '01/03/2024', time: '23:21', sender: 'mariuszjunker2019', content: 'Ok, Sunday is best. I\'m free and I\'ll be more rested, and so will Natasha, since she only started feeling better today. Let me know tomorrow.' },
+  { date: '02/03/2024', time: '16:52', sender: 'mariuszjunker2019', content: 'That\'s it for today, I\'m taking the 268.' },
+  { date: '02/03/2024', time: '19:50', sender: 'Ula Cholewińska', content: 'From 1 pm to 4 pm. Unless Natasha falls asleep, then we can figure something else out.' },
+  { date: '02/03/2024', time: '19:52', sender: 'mariuszjunker2019', content: 'Ok' },
+  { date: '02/03/2024', time: '20:12', sender: 'mariuszjunker2019', content: 'To avoid unnecessary drama tomorrow, I\'ll take Natasha out for some fun or a walk for a few hours next Sunday. You can call or write. You\'ll also be able to rest or do something else. I\'m letting you know in advance, and for clarity, I\'m not asking for your permission, I just want you to know my plans.' },
+  { date: '02/03/2024', time: '21:28', sender: 'Ula Cholewińska', content: 'So for your clarity, you\'d better learn to ask. Because you completely can\'t take care of a child, so forget about going alone with her. Yesterday I asked you 10 times not to toss the child around and not to tire her, today she\'s been crying all day... especially since you came under the influence of alcohol again. For clarity, I don\'t intend to see you every weekend because you\'re taking too much advantage. Especially since you\'ve already made plans like 5 times and stood the children up. So sorry, but until you start behaving normally I definitely won\'t entrust the child to you. Especially since it\'s a weak idea to take a child for a few hours on a walk in this weather if she\'s fresh off antibiotics. And if you don\'t understand this message then we can settle it in court. But I think it will end worse for you. And for clarity, I didn\'t even intend to see you next week because we have plans with the girls and guests.' },
+  { date: '02/03/2024', time: '21:28', sender: 'Ula Cholewińska', content: 'And don\'t write me 1000 messages right now because I don\'t have the time or desire to listen to your whining.' },
+  { date: '02/03/2024', time: '21:33', sender: 'Ula Cholewińska', content: 'And give me your address where you\'re living now, because I got a call from social services today and I told them I don\'t know it because you won\'t tell me. And they called you and you didn\'t answer.' },
+  { date: '02/03/2024', time: '22:03', sender: 'Ula Cholewińska', content: 'And can I give your number to Joel if anything?' },
+  { date: '03/03/2024', time: '10:19', sender: 'mariuszjunker2019', content: 'What, do I have some legal ban that I have to ask?' },
+  { date: '03/03/2024', time: '10:19', sender: 'mariuszjunker2019', content: 'Give Joel the number.' },
+  { date: '03/03/2024', time: '10:20', sender: 'mariuszjunker2019', content: 'I don\'t want to give you the address, you liar.' },
+  { date: '03/03/2024', time: '10:24', sender: 'mariuszjunker2019', content: 'We won\'t argue. Just give me the number when I get there and I\'ll call myself.' },
+  { date: '03/03/2024', time: '10:27', sender: 'mariuszjunker2019', content: 'I can be 20 minutes early, I have a bus then.' },
+  { date: '03/03/2024', time: '10:55', sender: 'mariuszjunker2019', content: 'And let\'s not argue today. I\'ll file for legal visitation with Natasha since you don\'t want to get along like a normal parent. It won\'t be you limiting my time and always having a problem with me, because you don\'t understand at all that you\'re acting like she\'s only your child. I don\'t care about your whims. I have nothing to lose and I\'m not afraid. If you want to sling mud because you can\'t get along, that\'s the best solution since you\'re being so stubborn and doing nothing to improve things.' },
+  { date: '03/03/2024', time: '11:03', sender: 'mariuszjunker2019', content: 'And we won\'t talk about this anymore because I\'m tired of this situation, of always having to beg. It\'s time to deal with this properly because I won\'t get back the time with my daughter, and I don\'t intend to be at your mercy anymore, listening to how I can\'t do anything. And today, give me some freedom with Natasha, since it\'s unknown when I\'ll see her again because you "don\'t intend to see me." I come for Natasha, but you\'d rather finish me off than support me. It matters to me, but for you, it doesn\'t count that someone tries. Now I won\'t bother you with messages anymore.' },
+  { date: '03/03/2024', time: '11:06', sender: 'mariuszjunker2019', content: 'And my letter to the institution about Natasha has been ready for weeks, so I\'ll send it tomorrow first thing, I\'ll take time off work early.' },
+  { date: '03/03/2024', time: '11:44', sender: 'mariuszjunker2019', content: 'And I didn\'t show up a few times for obvious reasons. You won\'t even let me explain. How many times did you cause a scene when I arrived, forcing me to leave? But you don\'t look at that. I traveled back and forth from Dewsbury to your place multiple times, so don\'t tell me I stand up my daughters. I always tried. Look at yourself first, because I have a lot to say about you too, and it\'s not guesswork, but concrete arguments about the children\'s well-being. They\'re not to blame for anything, unlike you, flying at me with your fists with a child in your arms. It\'s not the first time. You chose the worst option instead of getting along. I will fight for Natasha because I don\'t trust you with anything anymore. You just exploit my weak point. I won\'t be treated like this anymore.' },
+  { date: '03/03/2024', time: '11:48', sender: 'mariuszjunker2019', content: 'I don\'t want to revenge, I want to justice. So that you are aware and don\'t invent another fairy tale about your hard life, because you\'re the one making it hard for yourself. And for me, you want me to suffer as much as possible, using the child for your games.' },
+  { date: '03/03/2024', time: '11:51', sender: 'mariuszjunker2019', content: 'I\'ll be there at 13:10, I checked the bus schedule wrong.' },
+  { date: '03/03/2024', time: '12:42', sender: 'mariuszjunker2019', content: 'I\'m on my way.' },
+  { date: '05/03/2024', time: '11:11', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '05/03/2024', time: '12:29', sender: 'mariuszjunker2019', content: 'You are working very nicely.' },
+  { date: '05/03/2024', time: '12:30', sender: 'mariuszjunker2019', content: 'I have to work now, can\'t write.' },
+  { date: '05/03/2024', time: '18:30', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '05/03/2024', time: '19:11', sender: 'mariuszjunker2019', content: 'I\'m just passing your place on the bus.' },
+  { date: '05/03/2024', time: '19:14', sender: 'mariuszjunker2019', content: 'I stayed longer, that\'s why I\'m back so late. I got out of the car at the wrong place and walked 30 minutes to the bus station. This Bradford is terrible when you walk different paths.' },
+  { date: '06/03/2024', time: '09:25', sender: 'Ula Cholewińska', content: 'Are you coming to see the girls today?' },
+  { date: '06/03/2024', time: '09:57', sender: 'mariuszjunker2019', content: 'Hey, if you agree, then yes. You didn\'t let me know, but I\'d love to come.' },
+  { date: '06/03/2024', time: '12:54', sender: 'mariuszjunker2019', content: 'I finish at 3 pm.' },
+  { date: '06/03/2024', time: '15:44', sender: 'Ula Cholewińska', content: 'What time will you be here?' },
+  { date: '06/03/2024', time: '15:45', sender: 'mariuszjunker2019', content: 'I\'m heading to the bus now.' },
+  { date: '06/03/2024', time: '15:52', sender: 'mariuszjunker2019', content: 'I\'m here but it hasn\'t left yet. I think I\'ll make it, pick up the medicine, less than an hour.' },
+  { date: '06/03/2024', time: '15:56', sender: 'mariuszjunker2019', content: 'It left.' },
+  { date: '06/03/2024', time: '16:27', sender: 'mariuszjunker2019', content: 'I\'m at the roundabout by the old pub.' },
+  { date: '06/03/2024', time: '16:51', sender: 'mariuszjunker2019', content: 'Coming to you now.' },
+  { date: '08/03/2024', time: '10:54', sender: 'Ula Cholewińska', content: 'Hey, are you transferring the money for Natasha today?' },
+  { date: '08/03/2024', time: '11:05', sender: 'mariuszjunker2019', content: 'Hey, yes, as soon as I get my paycheck, I\'ll transfer it right away.' },
+  { date: '08/03/2024', time: '15:07', sender: 'Ula Cholewińska', content: 'If you can, please transfer it to my Barclays account, because I have some block on my Halifax account again and can\'t even do shopping. ;/' },
+  { date: '08/03/2024', time: '15:14', sender: 'mariuszjunker2019', content: 'Ula, before your message came through, I had already transferred 250 to Halifax; 50 for each of the girls for clothes.' },
+  { date: '08/03/2024', time: '15:19', sender: 'mariuszjunker2019', content: 'It went through.' },
+  { date: '08/03/2024', time: '15:24', sender: 'Ula Cholewińska', content: 'That\'s nice of you to give something for Nadia too.' },
+  { date: '08/03/2024', time: '17:33', sender: 'mariuszjunker2019', content: 'I have two daughters, we have to take care of them together. Have fun, I\'m finishing soon, I\'m exhausted.' },
+  { date: '08/03/2024', time: '17:36', sender: 'Ula Cholewińska', content: 'I transferred 100 back to you.' },
+  { date: '08/03/2024', time: '18:11', sender: 'mariuszjunker2019', content: 'Ok, thanks.' },
+  { date: '09/03/2024', time: '08:41', sender: 'mariuszjunker2019', content: 'https://photos.app.goo.gl/bREgHC2CPFA3Vctk8 hihi a memory for today.' },
+  { date: '09/03/2024', time: '09:16', sender: 'mariuszjunker2019', content: 'I\'ll be passing by in a minute. Are you feeling better? Are the girls happy and reasonably well-behaved?' },
+  { date: '09/03/2024', time: '09:21', sender: 'Ula Cholewińska', content: 'I\'m so-so. Yes, the girls are ok. This girl has younger siblings, she handles Natasha very nicely, it\'s very good. ;) I think she\'s the calmest of all.' },
+  { date: '09/03/2024', time: '09:26', sender: 'mariuszjunker2019', content: 'That\'s great. If you want, I can come tomorrow for longer, maybe you can rest, or I\'ll just take care of her. I can even make dinner, but you decide. I have the whole day free.' },
+  { date: '09/03/2024', time: '16:27', sender: 'Ula Cholewińska', content: 'Actually, my plans totally changed.' },
+  { date: '09/03/2024', time: '16:27', sender: 'Ula Cholewińska', content: 'So if you want, you can come tomorrow.' },
+  { date: '09/03/2024', time: '16:29', sender: 'mariuszjunker2019', content: 'Oki, I\'ll be there.' },
+  { date: '09/03/2024', time: '16:39', sender: 'mariuszjunker2019', content: 'If you have something planned, just inform me that it\'s not possible for me to see Natasha all weekend. You mentioned Friday and Saturday, so okay. Don\'t take this as an attack, but just inform me. I waited several hours for a response, you can\'t do that.' },
+  { date: '09/03/2024', time: '16:40', sender: 'Ula Cholewińska', content: 'I already told you about the whole weekend.' },
+  { date: '09/03/2024', time: '16:40', sender: 'Ula Cholewińska', content: 'But if you intend to argue with me, don\'t even start.' },
+  { date: '09/03/2024', time: '16:41', sender: 'mariuszjunker2019', content: 'If you had told me, I wouldn\'t have written anything. I\'m not starting anything. You have your peace. Just let me know what time I should be there.' },
+  { date: '09/03/2024', time: '16:42', sender: 'Ula Cholewińska', content: 'Is 12 ok?' },
+  { date: '09/03/2024', time: '16:45', sender: 'Ula Cholewińska', content: 'Until 5 pm, is that ok?' },
+  { date: '09/03/2024', time: '16:51', sender: 'mariuszjunker2019', content: 'Yes' },
+  { date: '09/03/2024', time: '16:55', sender: 'mariuszjunker2019', content: 'I have a question. If I live in Cleckheaton, will I be able to take Natasha and see her more often?' },
+  { date: '09/03/2024', time: '16:56', sender: 'Ula Cholewińska', content: 'It depends on your behavior and how you care for the child.' },
+  { date: '09/03/2024', time: '16:57', sender: 'mariuszjunker2019', content: 'Alright, we\'ll discuss it properly soon. I\'m going back to work.' },
+  { date: '09/03/2024', time: '17:01', sender: 'Ula Cholewińska', content: 'For now, you make appointments yourself and then stand us up, with some stupid, childish excuses. Above all, learn to keep your word.' },
+  { date: '09/03/2024', time: '18:39', sender: 'mariuszjunker2019', content: 'You\'re assuming again. You won\'t let me explain how it was, you just jump to the conclusion that I stood you up. You know, sometimes not everything goes perfectly... But you only look at the negative. I can\'t remember the last time, apart from financial help or taking you somewhere, I heard a word that would motivate me. But okay, I know what my goal is. You can keep thinking of me like that.' },
+  { date: '09/03/2024', time: '20:16', sender: 'mariuszjunker2019', content: 'I just finished work. I\'ll be there tomorrow at 12.' },
+  { date: '10/03/2024', time: '10:33', sender: 'mariuszjunker2019', content: 'https://photos.app.goo.gl/5AXF9xDFAxSWbDfe9' },
+  { date: '10/03/2024', time: '15:49', sender: 'Ula Cholewińska', content: 'Pick up.' },
+  { date: '10/03/2024', time: '15:52', sender: 'mariuszjunker2019', content: 'Done.' },
+  { date: '10/03/2024', time: '16:01', sender: 'Ula Cholewińska', content: 'We\'re coming back.' },
+  { date: '10/03/2024', time: '16:02', sender: 'mariuszjunker2019', content: 'Ok' },
+  { date: '10/03/2024', time: '19:35', sender: 'Ula Cholewińska', content: 'Do you need those 5 pounds in your account? I can transfer it right now, ok?' },
+  { date: '10/03/2024', time: '19:59', sender: 'Ula Cholewińska', content: 'I already transferred it :)' },
+  { date: '10/03/2024', time: '19:59', sender: 'mariuszjunker2019', content: 'No, Urszulka, don\'t worry about it, but it\'s nice that you asked. I arrived about 10 minutes ago.' },
+  { date: '10/03/2024', time: '20:00', sender: 'mariuszjunker2019', content: 'Then I\'ll transfer it right back to you. I don\'t need it. At most, you\'ll have it for a taxi for the girls.' },
+  { date: '10/03/2024', time: '20:10', sender: 'mariuszjunker2019', content: 'Urszulka, Disney is fixed. You just need to log in. Enjoy watching, hi.' },
+  { date: '10/03/2024', time: '20:18', sender: 'Ula Cholewińska', content: 'Oh, was it broken?' },
+  { date: '10/03/2024', time: '20:18', sender: 'Ula Cholewińska', content: 'You didn\'t say anything.' },
+  { date: '10/03/2024', time: '20:23', sender: 'mariuszjunker2019', content: 'When a new version comes out, you have to update it. Recently, it wasn\'t available for download, but today it was. I\'ll show you how to do it tomorrow.' },
+  { date: '10/03/2024', time: '20:29', sender: 'mariuszjunker2019', content: 'I\'ll have 65 pounds for you.' },
+  { date: '10/03/2024', time: '20:47', sender: 'Ula Cholewińska', content: 'Oki, and Disney was working on my phone, for once I didn\'t use it 🤣' },
+  { date: '10/03/2024', time: '20:47', sender: 'Ula Cholewińska', content: 'You don\'t have to give me that money.' },
+  { date: '10/03/2024', time: '21:08', sender: 'mariuszjunker2019', content: 'Let\'s help and support each other, Urszulka. Thank you for today, it was nice to see you, the whole family smiling. Wishing colorful dreams for the girls and for the best mommy in the world.' },
+  { date: '10/03/2024', time: '22:59', sender: 'Ula Cholewińska', content: 'Natasha just fell asleep, what a nightmare :/' },
+  { date: '10/03/2024', time: '23:02', sender: 'mariuszjunker2019', content: 'Oh, dear mother, I really feel for you.' },
+  { date: '11/03/2024', time: '13:23', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '11/03/2024', time: '13:45', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '11/03/2024', time: '13:46', sender: 'Ula Cholewińska', content: 'I\'m praying she falls asleep. I just remembered that someone is coming to view the apartment tomorrow, and Natasha, as if on purpose, is scattering literally everything, everywhere.' },
+  { date: '11/03/2024', time: '13:47', sender: 'mariuszjunker2019', content: 'I\'ll be there, I\'ll help.' },
+  { date: '11/03/2024', time: '13:47', sender: 'mariuszjunker2019', content: 'I haven\'t started working, I\'m just driving.' },
+  { date: '11/03/2024', time: '13:48', sender: 'Ula Cholewińska', content: 'Wherever I clean, she goes to another spot and messes everything up :/' },
+  { date: '11/03/2024', time: '13:48', sender: 'mariuszjunker2019', content: 'It will be fine.' },
+  { date: '11/03/2024', time: '13:48', sender: 'mariuszjunker2019', content: 'Just rest when she sleeps.' },
+  { date: '11/03/2024', time: '13:49', sender: 'Ula Cholewińska', content: 'Are you kidding? No chance.' },
+  { date: '11/03/2024', time: '13:49', sender: 'Ula Cholewińska', content: 'I still have to make dinner.' },
+  { date: '11/03/2024', time: '13:49', sender: 'Ula Cholewińska', content: 'Nadia is always hungry after school.' },
+  { date: '11/03/2024', time: '13:49', sender: 'mariuszjunker2019', content: 'Well, get to work, not on your phone.' },
+  { date: '11/03/2024', time: '13:50', sender: 'Ula Cholewińska', content: 'Because I\'m lying with her right now!' },
+  { date: '11/03/2024', time: '13:51', sender: 'Ula Cholewińska', content: 'Then don\'t write to me.' },
+  { date: '11/03/2024', time: '13:51', sender: 'mariuszjunker2019', content: 'Oki, bye then, see you later.' },
+  { date: '11/03/2024', time: '13:51', sender: 'mariuszjunker2019', content: 'But seriously, I\'m stopping 🤣🤣🤣' },
+  { date: '11/03/2024', time: '13:52', sender: 'Ula Cholewińska', content: 'So, bye.' },
+  { date: '11/03/2024', time: '13:52', sender: 'mariuszjunker2019', content: 'Bye bye.' },
+  { date: '11/03/2024', time: '13:57', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '11/03/2024', time: '13:58', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '11/03/2024', time: '13:58', sender: 'Ula Cholewińska', content: 'Watch out, because I\'ll be mad as a wasp today.' },
+  { date: '11/03/2024', time: '13:58', sender: 'Ula Cholewińska', content: ':/' },
+  { date: '11/03/2024', time: '17:29', sender: 'mariuszjunker2019', content: 'I\'m at the interchange already, my bus is soon.' },
+  { date: '11/03/2024', time: '17:38', sender: 'mariuszjunker2019', content: 'I\'m here, it\'s leaving soon. If you need anything, I can stop at Tesco or a local shop.' },
+  { date: '12/03/2024', time: '07:56', sender: 'mariuszjunker2019', content: 'Just left Cleckheaton, what a mess.' },
+  { date: '12/03/2024', time: '07:57', sender: 'Ula Cholewińska', content: ':/' },
+  { date: '12/03/2024', time: '07:58', sender: 'mariuszjunker2019', content: 'It\'s not bad, half the way by taxi. If I had known, I would have ordered it from your place just now, hihi. Have a nice day, there\'s a box for you on the dresser.' },
+  { date: '12/03/2024', time: '07:59', sender: 'mariuszjunker2019', content: 'Thanks for yesterday, we\'ll be in touch.' },
+  { date: '12/03/2024', time: '09:23', sender: 'Ula Cholewińska', content: 'The box is awesome 😁' },
+  { date: '12/03/2024', time: '11:37', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '12/03/2024', time: '12:21', sender: 'Ula Cholewińska', content: 'Today Natalia is cleaning up after herself.' },
+  { date: '12/03/2024', time: '12:21', sender: 'Ula Cholewińska', content: 'Cleaning.' },
+  { date: '12/03/2024', time: '12:21', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '12/03/2024', time: '12:40', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '12/03/2024', time: '12:40', sender: 'Ula Cholewińska', content: 'Too big :/' },
+  { date: '12/03/2024', time: '13:11', sender: 'mariuszjunker2019', content: 'Too bad, but she\'s cute with bangs, just like you, hiho.' },
+  { date: '12/03/2024', time: '13:12', sender: 'Ula Cholewińska', content: 'You haven\'t seen me with bangs.' },
+  { date: '12/03/2024', time: '13:15', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '12/03/2024', time: '13:16', sender: 'Ula Cholewińska', content: 'Do you remember about the parent-teacher meeting?' },
+  { date: '12/03/2024', time: '16:03', sender: 'mariuszjunker2019', content: 'Yes, I\'m going. My friend will drive me to Cleckheatan, we\'re leaving now. He\'s cool, fuck it, kids are the most important, I\'ll take you.' },
+  { date: '12/03/2024', time: '16:03', sender: 'mariuszjunker2019', content: 'Hihi' },
+  { date: '12/03/2024', time: '16:38', sender: 'Ula Cholewińska', content: 'But it\'s still possible you\'ll have to wait until 17:20, unless you get lucky.' },
+  { date: '12/03/2024', time: '16:39', sender: 'mariuszjunker2019', content: 'Cool.' },
+  { date: '12/03/2024', time: '16:40', sender: 'Ula Cholewińska', content: 'Are you in Cleckheaton already?' },
+  { date: '12/03/2024', time: '16:41', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '12/03/2024', time: '16:50', sender: 'Ula Cholewińska', content: 'Oki, I\'m waiting for those people.' },
+  { date: '12/03/2024', time: '16:51', sender: 'Ula Cholewińska', content: 'And do you want to drop by after, or are you going straight to Dewsbury? And are we seeing each other on Thursday?' },
+  { date: '12/03/2024', time: '16:55', sender: 'mariuszjunker2019', content: 'Oki' },
+  { date: '12/03/2024', time: '16:55', sender: 'mariuszjunker2019', content: 'I\'ll drop by for a coffee and then go.' },
+  { date: '12/03/2024', time: '16:56', sender: 'mariuszjunker2019', content: 'And where am I supposed to go there, anyway?' },
+  { date: '12/03/2024', time: '16:56', sender: 'Ula Cholewińska', content: 'Oki :) I didn\'t make dinner today, we had fish from the chippy ;)' },
+  { date: '12/03/2024', time: '16:56', sender: 'mariuszjunker2019', content: 'Oki, no problem.' },
+  { date: '12/03/2024', time: '16:57', sender: 'Ula Cholewińska', content: 'Go to the office and say you\'re here for Nadia\'s parent-teacher meeting.' },
+  { date: '12/03/2024', time: '16:57', sender: 'mariuszjunker2019', content: 'Ok' },
+  { date: '12/03/2024', time: '17:07', sender: 'Ula Cholewińska', content: 'Ask if she\'s weak in anything or if I need to work on something more with her at home.' },
+  { date: '12/03/2024', time: '17:08', sender: 'Ula Cholewińska', content: 'And how she behaves, if there are any comments.' },
+  { date: '12/03/2024', time: '17:08', sender: 'mariuszjunker2019', content: 'Oki' },
+  { date: '12/03/2024', time: '17:09', sender: 'mariuszjunker2019', content: 'I\'m at the school now.' },
+  { date: '12/03/2024', time: '17:20', sender: 'mariuszjunker2019', content: 'I\'m done.' },
+  { date: '12/03/2024', time: '17:20', sender: 'mariuszjunker2019', content: 'Going to your place.' },
+  { date: '12/03/2024', time: '17:21', sender: 'Ula Cholewińska', content: 'Oooo' },
+  { date: '12/03/2024', time: '17:21', sender: 'mariuszjunker2019', content: 'Are you still waiting?' },
+  { date: '12/03/2024', time: '17:21', sender: 'Ula Cholewińska', content: 'Well, you got lucky.' },
+  { date: '12/03/2024', time: '17:22', sender: 'Ula Cholewińska', content: 'And it went quickly.' },
+  { date: '12/03/2024', time: '17:22', sender: 'Ula Cholewińska', content: 'They just left.' },
+  { date: '12/03/2024', time: '17:22', sender: 'mariuszjunker2019', content: 'Oki, I\'ll walk slowly then.' },
+  { date: '12/03/2024', time: '17:23', sender: 'Ula Cholewińska', content: 'Yes, because they are still under the block.' },
+  { date: '12/03/2024', time: '17:23', sender: 'mariuszjunker2019', content: 'Ok' },
+  { date: '12/03/2024', time: '17:27', sender: 'Ula Cholewińska', content: 'They\'re having some kind of agency meeting under our block.' },
+  { date: '12/03/2024', time: '17:28', sender: 'mariuszjunker2019', content: 'Aaa, cool. Then I\'ll just go home, Ula.' },
+  { date: '12/03/2024', time: '17:31', sender: 'Ula Cholewińska', content: 'He just left.' },
+  { date: '12/03/2024', time: '17:31', sender: 'mariuszjunker2019', content: 'Hehe' },
+  { date: '12/03/2024', time: '17:31', sender: 'mariuszjunker2019', content: 'Oki' },
+  { date: '12/03/2024', time: '17:31', sender: 'Ula Cholewińska', content: 'And I think someone is moving out because the other lady from another agency is here.' },
+  { date: '12/03/2024', time: '17:31', sender: 'Ula Cholewińska', content: 'In our block.' },
+  { date: '12/03/2024', time: '17:32', sender: 'mariuszjunker2019', content: 'Oh, you see.' },
+  { date: '12/03/2024', time: '19:03', sender: 'mariuszjunker2019', media: '[Video note omitted]' },
+  { date: '12/03/2024', time: '19:05', sender: 'Ula Cholewińska', content: 'And what is this little circle??' },
+  { date: '12/03/2024', time: '19:06', sender: 'mariuszjunker2019', media: '[Video note omitted]' },
+  { date: '12/03/2024', time: '19:20', sender: 'mariuszjunker2019', content: 'https://music.youtube.com/watch?v=F-SHlT52y6U&si=RhCa324_p4JLVKxp' },
+  { date: '12/03/2024', time: '19:21', sender: 'mariuszjunker2019', content: ':)' },
+  { date: '12/03/2024', time: '19:22', sender: 'mariuszjunker2019', content: 'I\'m home now, was talking to Maciek.' },
+  { date: '12/03/2024', time: '23:15', sender: 'mariuszjunker2019', content: 'Are you sleeping, old lady?' },
+  { date: '13/03/2024', time: '07:48', sender: 'Ula Cholewińska', content: 'I slept like a baby :)' },
+  { date: '13/03/2024', time: '09:33', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '13/03/2024', time: '09:33', sender: 'Ula Cholewińska', content: 'You didn\'t give me the proof of ID to pick up the package.' },
+  { date: '13/03/2024', time: '10:00', sender: 'mariuszjunker2019', content: 'That was supposed to be the last piece of paper.' },
+  { date: '13/03/2024', time: '10:01', sender: 'mariuszjunker2019', content: 'Ula, I just got back, I left my phone.' },
+  { date: '13/03/2024', time: '10:02', sender: 'mariuszjunker2019', content: 'Give me a second, I\'ll get back to you.' },
+  { date: '13/03/2024', time: '10:03', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '13/03/2024', time: '22:26', sender: 'mariuszjunker2019', content: 'I\'m going to get ready, if you\'re free later, let me know.' },
+  { date: '13/03/2024', time: '22:27', sender: 'Ula Cholewińska', content: 'I\'m going to hang the laundry and go to sleep :(' },
+  { date: '13/03/2024', time: '22:27', sender: 'mariuszjunker2019', content: 'Okay, we\'ll talk tomorrow, I\'ll be over after work.' },
+  { date: '13/03/2024', time: '22:27', sender: 'mariuszjunker2019', content: 'Colorful dreams, I\'m going to sleep too, good night.' },
+  { date: '13/03/2024', time: '22:28', sender: 'Ula Cholewińska', content: 'I\'m just wondering now if there\'s any point tomorrow, because I usually pick up Natasha at 6 pm from the nursery and she falls asleep on the way :/' },
+  { date: '13/03/2024', time: '22:28', sender: 'mariuszjunker2019', content: 'If you can pick it up tomorrow, thank you very much, and I hope everything is okay.' },
+  { date: '13/03/2024', time: '22:28', sender: 'Ula Cholewińska', content: 'Maybe Friday is better.' },
+  { date: '13/03/2024', time: '22:28', sender: 'mariuszjunker2019', content: 'Ok then, another time, just...' },
+  { date: '13/03/2024', time: '22:28', sender: 'mariuszjunker2019', content: '...let me know.' },
+  { date: '13/03/2024', time: '22:28', sender: 'mariuszjunker2019', content: 'Alright, Friday is fine too.' },
+  { date: '13/03/2024', time: '22:28', sender: 'mariuszjunker2019', content: 'I have free time, hihi.' },
+  { date: '13/03/2024', time: '22:29', sender: 'Ula Cholewińska', content: 'I didn\'t think of it earlier.' },
+  { date: '13/03/2024', time: '22:29', sender: 'Ula Cholewińska', content: 'How so?' },
+  { date: '13/03/2024', time: '22:29', sender: 'mariuszjunker2019', content: 'Silly.' },
+  { date: '13/03/2024', time: '22:29', sender: 'mariuszjunker2019', content: 'Always after work, Urszulka.' },
+  { date: '13/03/2024', time: '22:29', sender: 'Ula Cholewińska', content: 'Aaaa 🤣' },
+  { date: '13/03/2024', time: '22:30', sender: 'mariuszjunker2019', content: 'Hehe, check out the funfair. I saw them setting it up. Maybe we can go, but for now just check, don\'t tell Nadia, shhhh.' },
+  { date: '13/03/2024', time: '22:31', sender: 'Ula Cholewińska', content: 'What should I check?' },
+  { date: '13/03/2024', time: '22:31', sender: 'mariuszjunker2019', content: 'A surprise for her, if the weather is nice.' },
+  { date: '13/03/2024', time: '22:31', sender: 'mariuszjunker2019', content: 'They are setting up a funfair where it was last time in Cleckheaton, I saw it in the parking lot. Take a look tomorrow, maybe they\'ve already left.' },
+  { date: '13/03/2024', time: '22:32', sender: 'Ula Cholewińska', content: 'Yes, they will be there until the 18th.' },
+  { date: '13/03/2024', time: '22:32', sender: 'mariuszjunker2019', content: 'I didn\'t look today when I was coming back from work.' },
+  { date: '13/03/2024', time: '22:33', sender: 'Ula Cholewińska', content: 'There\'s a sign.' },
+  { date: '13/03/2024', time: '22:33', sender: 'Ula Cholewińska', content: 'That on the weekend...' },
+  { date: '13/03/2024', time: '22:33', sender: 'mariuszjunker2019', content: 'Alright, cool, so we\'ll see what the weather is like.' },
+  { date: '13/03/2024', time: '22:33', sender: 'Ula Cholewińska', content: '...the parking lot will be occupied until the 18th.' },
+  { date: '13/03/2024', time: '22:33', sender: 'mariuszjunker2019', content: 'Super, so we\'ll pop over, let her have some fun.' },
+  { date: '13/03/2024', time: '22:34', sender: 'mariuszjunker2019', content: 'You can tell her if you want.' },
+  { date: '13/03/2024', time: '22:34', sender: 'Ula Cholewińska', content: 'She was already asking today if we would go on the go-karts.' },
+  { date: '13/03/2024', time: '22:34', sender: 'mariuszjunker2019', content: 'Well, that\'s extra great that we\'ll go.' },
+  { date: '13/03/2024', time: '22:34', sender: 'mariuszjunker2019', content: 'I hope it doesn\'t rain.' },
+  { date: '13/03/2024', time: '22:35', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '13/03/2024', time: '22:35', sender: 'mariuszjunker2019', content: 'You\'re killing me.' },
+  { date: '13/03/2024', time: '22:35', sender: 'Ula Cholewińska', content: 'Kasia wanted to come for the weekend, but I\'ll tell them maybe next week.' },
+  { date: '13/03/2024', time: '22:36', sender: 'Ula Cholewińska', content: 'But Sunday looks ok.' },
+  { date: '13/03/2024', time: '22:36', sender: 'Ula Cholewińska', content: 'It will be warm and it won\'t rain.' },
+  { date: '13/03/2024', time: '22:36', sender: 'mariuszjunker2019', content: 'Well, as you wish, you don\'t have to, if you have plans.' },
+  { date: '13/03/2024', time: '22:37', sender: 'Ula Cholewińska', content: 'No, it\'s cool.' },
+  { date: '13/03/2024', time: '22:37', sender: 'mariuszjunker2019', content: 'Do as you see fit. Sunday is very likely to be nice. I don\'t know, but I want to go to work on Saturday.' },
+  { date: '13/03/2024', time: '22:38', sender: 'mariuszjunker2019', content: 'So Sunday works for me.' },
+  { date: '13/03/2024', time: '22:38', sender: 'mariuszjunker2019', content: 'And thanks for having such a positive attitude.' },
+  { date: '13/03/2024', time: '22:39', sender: 'Ula Cholewińska', content: 'Aha, so we\'ll arrange for Sunday, and maybe Kasia and Tomek will want to go too. :)' },
+  { date: '13/03/2024', time: '22:39', sender: 'mariuszjunker2019', content: 'Sure, ask them.' },
+  { date: '13/03/2024', time: '22:39', sender: 'mariuszjunker2019', content: 'It would be great if they wanted to.' },
+  { date: '13/03/2024', time: '22:40', sender: 'Ula Cholewińska', content: 'Anyway, Nadia installed some new keyboard for me and I can\'t figure it out 🤣' },
+  { date: '13/03/2024', time: '22:40', sender: 'mariuszjunker2019', content: 'Hold the spacebar and change it, maybe.' },
+  { date: '13/03/2024', time: '22:40', sender: 'Ula Cholewińska', content: 'Or I have to shorten my nails tomorrow 🤣' },
+  { date: '13/03/2024', time: '22:40', sender: 'mariuszjunker2019', content: 'Just a little bit, because they are mega pretty.' },
+  { date: '13/03/2024', time: '22:41', sender: 'Ula Cholewińska', content: 'Ooooo 😍' },
+  { date: '13/03/2024', time: '22:41', sender: 'mariuszjunker2019', content: 'And are the girls okay?' },
+  { date: '13/03/2024', time: '22:41', sender: 'Ula Cholewińska', content: 'I\'m going to hang this laundry. Natalia was wonderful all day until it was time to sleep 🤯' },
+  { date: '13/03/2024', time: '22:41', sender: 'mariuszjunker2019', content: 'I\'ll transfer you money for a taxi for the morning, go, don\'t tire yourself out so much.' },
+  { date: '13/03/2024', time: '22:41', sender: 'mariuszjunker2019', content: 'Well, go then.' },
+  { date: '13/03/2024', time: '22:42', sender: 'Ula Cholewińska', content: 'I even sang her songs today 🤣' },
+  { date: '13/03/2024', time: '22:42', sender: 'mariuszjunker2019', content: 'Oh damn, you\'re really trying if you\'re singing.' },
+  { date: '13/03/2024', time: '22:43', sender: 'mariuszjunker2019', content: 'I\'m going for a smoke and then to bed, maybe I\'ll have a wild sex dream about you.' },
+  { date: '13/03/2024', time: '22:45', sender: 'Ula Cholewińska', content: 'Yeah, I just don\'t know if she was falling asleep because she liked it or because of my bad singing 😅' },
+  { date: '13/03/2024', time: '22:46', sender: 'Ula Cholewińska', content: 'I wish that for you 😂' },
+  { date: '13/03/2024', time: '22:46', sender: 'Ula Cholewińska', content: 'Bye' },
+  { date: '13/03/2024', time: '22:47', sender: 'mariuszjunker2019', content: 'Bye' },
+  { date: '14/03/2024', time: '17:40', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '14/03/2024', time: '17:43', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '14/03/2024', time: '17:45', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '14/03/2024', time: '18:10', sender: 'mariuszjunker2019', content: 'I\'m leaving now.' },
+  { date: '14/03/2024', time: '18:10', sender: 'mariuszjunker2019', content: 'Leaving Bradford.' },
+  { date: '14/03/2024', time: '18:15', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '14/03/2024', time: '18:18', sender: 'mariuszjunker2019', content: 'You surprised me very nicely, thank you, really 🤩🤩🤩' },
+  { date: '14/03/2024', time: '18:19', sender: 'Ula Cholewińska', content: 'With what, heh.' },
+  { date: '14/03/2024', time: '18:20', sender: 'mariuszjunker2019', content: 'Guess 😝🤪🤪😝' },
+  { date: '15/03/2024', time: '09:38', sender: 'Ula Cholewińska', content: 'Thanks for thinking about the veggies yesterday :). I finally went to bed at 2 am :/' },
+  { date: '15/03/2024', time: '10:58', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '15/03/2024', time: '11:00', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '15/03/2024', time: '11:03', sender: 'Ula Cholewińska', content: 'And send me a photo of that paper from the parent-teacher meeting ;)' },
+  { date: '15/03/2024', time: '17:50', sender: 'mariuszjunker2019', content: 'I have the paper at home, I\'ll send it when I get back.' },
+  { date: '15/03/2024', time: '17:51', sender: 'mariuszjunker2019', content: 'How are things? I\'m done with work, waiting for the bus.' },
+  { date: '15/03/2024', time: '17:55', sender: 'Ula Cholewińska', content: 'Ah, it\'s cool. I just did a special shopping trip at Asda and they don\'t have diapers :/ neither 5+ nor any 6 :/' },
+  { date: '15/03/2024', time: '17:56', sender: 'mariuszjunker2019', content: 'I can buy them if you want, if they have them.' },
+  { date: '15/03/2024', time: '17:57', sender: 'Ula Cholewińska', content: 'Could you check today? At least one pack? Because if not, as a last resort, I\'ll order from Morrison. Then I\'ll wait.' },
+  { date: '15/03/2024', time: '17:57', sender: 'Ula Cholewińska', content: 'But the ones from Asda are better.' },
+  { date: '15/03/2024', time: '17:57', sender: 'mariuszjunker2019', content: 'I\'ll check.' },
+  { date: '15/03/2024', time: '17:57', sender: 'Ula Cholewińska', content: 'Oki, please let me know right away then.' },
+  { date: '15/03/2024', time: '18:40', sender: 'mariuszjunker2019', content: 'Around 7:30 pm, that\'s when I\'ll get there. And were you able to get that inhaler?' },
+  { date: '15/03/2024', time: '18:45', sender: 'Ula Cholewińska', content: 'I wasn\'t, because it\'s raining every day and I have to take a taxi with the girls :/' },
+  { date: '15/03/2024', time: '18:46', sender: 'mariuszjunker2019', content: 'Okay' },
+  { date: '15/03/2024', time: '19:02', sender: 'Ula Cholewińska', content: 'But I think it\'s also open tomorrow until 12.' },
+  { date: '15/03/2024', time: '19:03', sender: 'Ula Cholewińska', content: 'I\'ll check later. If you really care, I can go tomorrow.' },
+  { date: '15/03/2024', time: '19:04', sender: 'mariuszjunker2019', content: 'Cool, I\'ll sort it out myself. I\'m arriving in Dewsbury, I\'ll run to Asda and let you know.' },
+  { date: '15/03/2024', time: '20:12', sender: 'mariuszjunker2019', content: 'I got them, I bought 5+.' },
+  { date: '15/03/2024', time: '20:13', sender: 'Ula Cholewińska', content: 'Super.' },
+  { date: '15/03/2024', time: '22:29', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '15/03/2024', time: '22:29', sender: 'Ula Cholewińska', content: '🤯' },
+  { date: '15/03/2024', time: '22:30', sender: 'mariuszjunker2019', content: 'Hihi, our little one.' },
+  { date: '16/03/2024', time: '09:28', sender: 'Ula Cholewińska', content: 'How about we go to the funfair today?' },
+  { date: '16/03/2024', time: '09:29', sender: 'Ula Cholewińska', content: 'Because it\'s warm, and it shows it might rain tomorrow.' },
+  { date: '16/03/2024', time: '09:30', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '16/03/2024', time: '09:39', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '16/03/2024', time: '09:40', sender: 'Ula Cholewińska', content: 'Let me know then.' },
+  { date: '16/03/2024', time: '13:10', sender: 'Ula Cholewińska', content: 'Would you like to come over tonight after work and stay until tomorrow? Nadia wants to make dinner for us, and I\'m making soup from that beet greens you brought.' },
+  { date: '16/03/2024', time: '13:14', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '16/03/2024', time: '13:15', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '16/03/2024', time: '13:15', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '16/03/2024', time: '16:17', sender: 'Ula Cholewińska', content: 'I was just thinking, since you have to go to Dewsbury anyway, is it worth it for you to come here? Because if so, we can see each other tomorrow midday or something.' },
+  { date: '16/03/2024', time: '17:40', sender: 'mariuszjunker2019', content: 'If you have enough diapers, then I don\'t have to go to Dewsbury.' },
+  { date: '16/03/2024', time: '17:41', sender: 'mariuszjunker2019', content: 'So I\'ll come tomorrow, I\'ll bring the diapers and get myself cleaned up like a human being.' },
+  { date: '16/03/2024', time: '17:42', sender: 'mariuszjunker2019', content: 'And next time, please don\'t change your mind when you offer me something. I was really happy, and then when I read the message at the end of my shift, it was just not right. You know very well it\'s not a problem for me, so I completely don\'t understand. That\'s just not how you do things, Ula. Either don\'t ask me, or let\'s stick to what we agreed to avoid such situations. I don\'t want to talk about it. I was working my ass off just thinking it would be nice after work, and I was so happy.' },
+  { date: '16/03/2024', time: '17:43', sender: 'Ula Cholewińska', content: 'Sorry, my phone was charging.' },
+  { date: '16/03/2024', time: '17:43', sender: 'Ula Cholewińska', content: 'But I didn\'t change my mind, I just wrote that in case you preferred it.' },
+  { date: '16/03/2024', time: '17:44', sender: 'Ula Cholewińska', content: 'I thought maybe you had some other plan in Dewsbury and maybe you agreed out of politeness.' },
+  { date: '16/03/2024', time: '17:46', sender: 'Ula Cholewińska', content: 'If you want to, come over. I left soup for you anyway ;)' },
+  { date: '16/03/2024', time: '17:46', sender: 'mariuszjunker2019', content: 'Okay, I\'ll be in touch.' },
+  { date: '16/03/2024', time: '17:47', sender: 'mariuszjunker2019', content: 'I\'ll come tomorrow, just tell me what time.' },
+  { date: '16/03/2024', time: '17:47', sender: 'mariuszjunker2019', content: 'I\'ll write when I get to the bus.' },
+  { date: '16/03/2024', time: '17:48', sender: 'Ula Cholewińska', content: 'Aaa, okay. I don\'t understand your behavior. Especially since in that message, I asked, I didn\'t say I changed my mind.' },
+  { date: '16/03/2024', time: '17:48', sender: 'Ula Cholewińska', content: 'Ok, maybe 12 or 1 pm.' },
+  { date: '16/03/2024', time: '17:49', sender: 'Ula Cholewińska', content: 'I don\'t understand.' },
+  { date: '16/03/2024', time: '17:50', sender: 'mariuszjunker2019', content: 'I\'ll be there at 1 pm. I\'m going to the bus. I hope the weather is nice tomorrow.' },
+  { date: '16/03/2024', time: '17:51', sender: 'mariuszjunker2019', content: 'I\'ll explain tomorrow if you can\'t understand. I\'m on the bus, hope it leaves soon.' },
+  { date: '16/03/2024', time: '17:58', sender: 'Ula Cholewińska', content: 'It will be enough until Monday.' },
+  { date: '16/03/2024', time: '17:59', sender: 'mariuszjunker2019', content: 'Great, so I\'ll come to your place and go to Dewsbury tomorrow.' },
+  { date: '16/03/2024', time: '18:00', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '16/03/2024', time: '18:01', sender: 'mariuszjunker2019', content: 'When I\'m closer, I\'ll write. I want to rest for a bit.' },
+  { date: '16/03/2024', time: '18:05', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '16/03/2024', time: '18:06', sender: 'mariuszjunker2019', content: 'What time is the local shop open until??' },
+  { date: '16/03/2024', time: '18:07', sender: 'mariuszjunker2019', content: 'Today?' },
+  { date: '16/03/2024', time: '18:16', sender: 'Ula Cholewińska', content: 'Until 8 pm, I think.' },
+  { date: '16/03/2024', time: '18:17', sender: 'Ula Cholewińska', content: 'If you go, could you get Sudocrem for Natasha, even the small one?' },
+  { date: '16/03/2024', time: '18:17', sender: 'mariuszjunker2019', content: 'I\'ll get it.' },
+  { date: '16/03/2024', time: '18:18', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '16/03/2024', time: '18:18', sender: 'mariuszjunker2019', content: 'Do I have any boxers at your place?' },
+  { date: '16/03/2024', time: '18:18', sender: 'Ula Cholewińska', content: 'Yes. I just found a pair today.' },
+  { date: '16/03/2024', time: '18:18', sender: 'mariuszjunker2019', content: 'Awesome.' },
+  { date: '16/03/2024', time: '18:19', sender: 'Ula Cholewińska', content: 'Natashka is slowly waking up.' },
+  { date: '16/03/2024', time: '18:19', sender: 'Ula Cholewińska', content: 'She slept for a bit.' },
+  { date: '16/03/2024', time: '18:20', sender: 'mariuszjunker2019', content: 'Oki, I can\'t wait to see her. Shall we watch a movie when our angels go to sleep?' },
+  { date: '16/03/2024', time: '18:21', sender: 'Ula Cholewińska', content: 'Yeah, we can, but I think Natalia will go to sleep later than us 🤣' },
+  { date: '16/03/2024', time: '18:22', sender: 'mariuszjunker2019', content: 'I don\'t know any Natalia.' },
+  { date: '16/03/2024', time: '18:23', sender: 'mariuszjunker2019', content: 'I\'ll check out the funfair when I get off.' },
+  { date: '16/03/2024', time: '23:57', sender: 'Ula Cholewińska', content: 'Natashka is just starting to fall asleep.' },
+  { date: '16/03/2024', time: '23:58', sender: 'mariuszjunker2019', content: 'Ok, I\'ll stay here.' },
+  { date: '16/03/2024', time: '23:59', sender: 'mariuszjunker2019', content: 'I locked the door, I\'m not going out again.' },
+  { date: '17/03/2024', time: '19:13', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '17/03/2024', time: '19:13', sender: 'Ula Cholewińska', content: 'Another time.' },
+  { date: '18/03/2024', time: '09:18', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '18/03/2024', time: '09:44', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '18/03/2024', time: '09:45', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '18/03/2024', time: '09:50', sender: 'mariuszjunker2019', content: 'Oki, thanks.' },
+  { date: '18/03/2024', time: '09:51', sender: 'mariuszjunker2019', content: 'Starting work.' },
+  { date: '18/03/2024', time: '10:04', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '18/03/2024', time: '10:04', sender: 'Ula Cholewińska', content: 'New blocks delivery 😍' },
+  { date: '19/03/2024', time: '21:45', sender: 'mariuszjunker2019', content: 'So, just like I said, and that bitch told me otherwise. But thanks a lot, I just now have time to reply.' },
+  { date: '19/03/2024', time: '21:46', sender: 'mariuszjunker2019', content: 'But so many blocks, now we can build something.' },
+  { date: '19/03/2024', time: '21:47', sender: 'mariuszjunker2019', content: 'I\'m beat, Ula, I\'m so tired.' },
+  { date: '19/03/2024', time: '21:49', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '20/03/2024', time: '17:45', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '20/03/2024', time: '17:47', sender: 'Ula Cholewińska', content: 'What time will you be here?' },
+  { date: '20/03/2024', time: '17:47', sender: 'mariuszjunker2019', content: 'Hey, one sec.' },
+  { date: '20/03/2024', time: '17:48', sender: 'Ula Cholewińska', content: 'I don\'t understand.' },
+  { date: '20/03/2024', time: '17:48', sender: 'Ula Cholewińska', content: 'Natashka is still sleeping :/' },
+  { date: '20/03/2024', time: '17:48', sender: 'mariuszjunker2019', content: 'I\'m waiting for the bus, it\'s not here.' },
+  { date: '20/03/2024', time: '17:48', sender: 'mariuszjunker2019', content: 'I don\'t know, it was supposed to be here 8 minutes ago.' },
+  { date: '20/03/2024', time: '17:49', sender: 'Ula Cholewińska', content: 'But where are you waiting, in Bradford?' },
+  { date: '20/03/2024', time: '17:49', sender: 'mariuszjunker2019', content: 'I\'m gonna lose it.' },
+  { date: '20/03/2024', time: '17:49', sender: 'mariuszjunker2019', content: 'Yeah, and on top of that, I left my backpack in the car.' },
+  { date: '20/03/2024', time: '17:50', sender: 'mariuszjunker2019', content: 'I don\'t have my pants or my bus pass.' },
+  { date: '20/03/2024', time: '17:50', sender: 'mariuszjunker2019', content: 'And the ATM near me isn\'t working.' },
+  { date: '20/03/2024', time: '17:51', sender: 'mariuszjunker2019', content: 'I can come if the bus arrives, or tomorrow. But if it\'s today, I might stay over, because I don\'t know what time I\'ll get to Dewsbury.' },
+  { date: '20/03/2024', time: '17:52', sender: 'mariuszjunker2019', content: 'It\'s here.' },
+  { date: '20/03/2024', time: '17:52', sender: 'mariuszjunker2019', content: 'Oh, it only goes to Heckmondwike.' },
+  { date: '20/03/2024', time: '17:53', sender: 'mariuszjunker2019', content: 'That\'s fine, Natasha will wake up by then.' },
+  { date: '20/03/2024', time: '17:54', sender: 'Ula Cholewińska', content: 'You are not staying the night.' },
+  { date: '20/03/2024', time: '17:54', sender: 'mariuszjunker2019', content: 'Okay, I\'ll go after I sit with Natasha for a bit.' },
+  { date: '20/03/2024', time: '17:55', sender: 'Ula Cholewińska', content: 'I allowed it a few times, but that doesn\'t mean you can stay whenever you want, it doesn\'t work like that. Especially since I couldn\'t sleep because you had some problem all the time. And I couldn\'t speak in my own home because you had stupid remarks for me.' },
+  { date: '20/03/2024', time: '17:56', sender: 'mariuszjunker2019', content: 'Then maybe we can postpone to tomorrow, if you don\'t mind.' },
+  { date: '20/03/2024', time: '17:57', sender: 'Ula Cholewińska', content: 'It depends if Natasha sleeps at the nursery.' },
+  { date: '20/03/2024', time: '17:57', sender: 'Ula Cholewińska', content: 'I\'ll let you know.' },
+  { date: '20/03/2024', time: '17:58', sender: 'mariuszjunker2019', content: 'I\'ll come today then, I don\'t want to lose time with her.' },
+  { date: '20/03/2024', time: '17:58', sender: 'mariuszjunker2019', content: 'I think I\'ll be there in 25 minutes.' },
+  { date: '20/03/2024', time: '17:59', sender: 'Ula Cholewińska', content: 'But if you\'re in your work pants, it\'s not great condições for playing with her here.' },
+  { date: '20/03/2024', time: '18:00', sender: 'mariuszjunker2019', content: 'Okay, in that case I\'ll wait for you to tell me when I can come. My apologies for upsetting you earlier. I\'m heading to Dewsbury, then.' },
+  { date: '20/03/2024', time: '18:01', sender: 'Ula Cholewińska', content: 'I\'ll let you know tomorrow.' },
+  { date: '20/03/2024', time: '18:02', sender: 'mariuszjunker2019', content: 'Okay.' },
+  { date: '20/03/2024', time: '18:20', sender: 'mariuszjunker2019', content: 'And I also ask you to behave differently when I\'m there, be more understanding, and realize that I also have little time to spend with Natasha and I want to enjoy it. I understand you don\'t want me to stay over, but these are exceptional situations. Even if I had to ride that bus 4 times a day, I don\'t say anything about it. You never get a "no" from my side for anything you ask. Just let go of your attitude sometimes. I\'m actually happy that we can somehow get along. You also make mistakes and say things when I\'m there, and I don\'t point it out because there\'s no point. We should talk about these things, not text. I\'m not forcing you to spend time with me, and okay, I won\'t ask to stay over anymore, I understand what you wrote.' },
+  { date: '20/03/2024', time: '18:39', sender: 'Ula Cholewińska', content: 'Marian, spending time with someone and sleeping with someone who has issues are two different things for me... Apparently not for you. End of topic. Don\'t look for problems.' },
+  { date: '20/03/2024', time: '18:40', sender: 'Ula Cholewińska', content: 'And I think nobody would be more understanding of you than I have been :/' },
+  { date: '20/03/2024', time: '18:41', sender: 'mariuszjunker2019', content: 'I\'m not trying to find anything, it\'s okay, it\'s just an exchange of opinions, it\'s normal.' },
+  { date: '20/03/2024', time: '18:42', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '22/03/2024', time: '08:17', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '22/03/2024', time: '08:20', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '22/03/2024', time: '08:21', sender: 'mariuszjunker2019', content: 'https://music.youtube.com/watch?v=4z_-jEgA6BQ&si=GsaqQ_3Y2P8sEbl2 For a good morning, I\'m already at work, kiss the girls.' },
+  { date: '26/03/2024', time: '20:00', sender: 'mariuszjunker2019', content: ':)' },
+  { date: '27/03/2024', time: '20:05', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '27/03/2024', time: '20:06', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '27/03/2024', time: '20:07', sender: 'mariuszjunker2019', content: 'But you did the inhalations earlier?' },
+  { date: '27/03/2024', time: '20:08', sender: 'mariuszjunker2019', content: 'Sweethearts in the video.' },
+  { date: '27/03/2024', time: '20:09', sender: 'Ula Cholewińska', content: 'Yes. Twice a day, and at night I give her the inhaler because she\'s fine during the day but at night she was choking badly. But after 3 days, there\'s an improvement.' },
+  { date: '27/03/2024', time: '20:10', sender: 'Ula Cholewińska', content: 'Natashka has been asleep since 7 pm.' },
+  { date: '27/03/2024', time: '20:20', sender: 'mariuszjunker2019', content: 'Let her sleep and rest. Ula, I just got home. I\'m going to eat because I didn\'t even have time, and my sauce spilled in my backpack. I\'ll write later or tomorrow because I\'m exhausted. I hope the little one gets better. The most important thing is that she\'s better. It was nice to see the little girls together. Thanks for the video, it was the only normal message today that made me smile. Tomorrow will probably be an eventful day. If it gets too much, I might finish work early and get out of there, and maybe visit you all. You should rest too. I\'m off.' },
+  { date: '27/03/2024', time: '20:21', sender: 'Ula Cholewińska', content: 'There\'s no chance for a visit tomorrow because Natasha is at the nursery from morning till evening. Things have changed a bit, she\'ll be going two full days a week.' },
+  { date: '27/03/2024', time: '20:22', sender: 'mariuszjunker2019', content: 'Okay, we\'ll talk tomorrow.' },
+  { date: '27/03/2024', time: '20:23', sender: 'mariuszjunker2019', content: 'When I\'m at your place.' },
+  { date: '27/03/2024', time: '20:24', sender: 'mariuszjunker2019', content: 'It\'s a shame I\'m finding out after the fact, but oh well, I see you didn\'t even bother to say anything. But okay, I won\'t deal with such matters over the phone, and I hope we can talk normally. Let\'s not start the topic today since I don\'t know anything anyway. Good night.' },
+  { date: '27/03/2024', time: '20:25', sender: 'mariuszjunker2019', content: 'I\'ve had enough for today, totally. Kiss the little ones. Despite everything, I\'m glad you managed, so you don\'t think I\'m not happy. You can tell me on the weekend.' },
+  { date: '27/03/2024', time: '20:26', sender: 'mariuszjunker2019', content: 'And I need a photo of Natasha\'s birth certificate. If you have it on your phone, send it to me. If not, please send it tomorrow or Friday.' },
+  { date: '27/03/2024', time: '20:38', sender: 'Ula Cholewińska', content: 'But nothing "managed". What did I have to "bother" to tell you? I don\'t understand. You yourself told me recently that you don\'t have to explain anything to me. You\'re starting to annoy me. I see it, you always have a problem when it seems like I\'m succeeding at something. I didn\'t find a job, I\'m going to school.' },
+  { date: '27/03/2024', time: '20:40', sender: 'Ula Cholewińska', content: 'Unbelievable. I found out today and I\'m telling you, and I didn\'t have to at all because you only wanted to come next week anyway. But I see that in your opinion, you\'re actually happy when I\'m struggling and sitting at home. Bravo. If you\'re going to act like this, then thank you very much, I\'d rather spend the weekend in peace. And you had other plans anyway. Today I asked about Saturday, I had no problem.' },
+  { date: '27/03/2024', time: '20:42', sender: 'Ula Cholewińska', content: 'Besides, I don\'t understand what your problem is, as you said, YOU WON\'T BE A NANNY.' },
+  { date: '27/03/2024', time: '20:43', sender: 'mariuszjunker2019', content: 'I said that once. And yesterday, listen, it makes no sense. I\'m not going to guess. And as for Natasha, it\'s your duty to inform me. For your clarity, it\'s nothing malicious, just normal matters that concern me, so it\'s appropriate to behave properly and like a human being. I appreciate that you agreed, I\'m not attacking you, but I have every right to know about what\'s going on with Natasha.' },
+  { date: '27/03/2024', time: '20:43', sender: 'Ula Cholewińska', content: 'I still don\'t understand what your problem is.' },
+  { date: '27/03/2024', time: '20:43', sender: 'mariuszjunker2019', content: 'In nothing, you know.' },
+  { date: '27/03/2024', time: '20:43', sender: 'Ula Cholewińska', content: 'So I just informed you!!!!' },
+  { date: '27/03/2024', time: '20:43', sender: 'mariuszjunker2019', content: 'I don\'t have a problem.' },
+  { date: '27/03/2024', time: '20:44', sender: 'Ula Cholewińska', content: 'Okay, spare me. Because, holy shit, what a failure. We\'ll see each other after the holidays. Thanks for ruining every moment I\'m happy about. Bye.' },
+  { date: '27/03/2024', time: '20:47', sender: 'Ula Cholewińska', content: 'I beg you, don\'t write anything else to me and don\'t annoy me.' },
+  { date: '27/03/2024', time: '20:47', sender: 'mariuszjunker2019', content: 'I\'m writing to you normally and it turns out I\'m the worst. So be it. We\'ll see each after the holidays. I did nothing wrong, just wrote what I think. Apparently, I don\'t have the right to, because I come out as an asshole.' },
+  { date: '27/03/2024', time: '20:47', sender: 'mariuszjunker2019', content: 'I didn\'t do anything to you.' },
+  { date: '27/03/2024', time: '20:47', sender: 'Ula Cholewińska', content: 'Then read what you wrote again.' },
+  { date: '27/03/2024', time: '20:49', sender: 'Ula Cholewińska', content: 'Leave me alone... That\'s why I don\'t even want to talk to you. You always want to destroy me or anything I succeed in. You enjoy your life, you can do whatever you want, so enjoy it. I\'m trying too! Only, I don\'t know if you\'ve noticed, it\'s much harder for me to gain anything!' },
+  { date: '27/03/2024', time: '20:49', sender: 'mariuszjunker2019', content: 'I am happy. I don\'t understand why such a reaction. It\'s about my daughter, it\'s about her. Something is changing and it affects me, so tell me. And if things are working out for you, I\'m happy too.' },
+  { date: '27/03/2024', time: '20:49', sender: 'mariuszjunker2019', content: 'I won\'t say anything then, because you always blame me.' },
+  { date: '27/03/2024', time: '20:49', sender: 'Ula Cholewińska', content: 'Yeah, right. I can see just how happy you are.' },
+  { date: '27/03/2024', time: '20:49', sender: 'mariuszjunker2019', content: 'That\'s enough.' },
+  { date: '27/03/2024', time: '20:49', sender: 'Ula Cholewińska', content: 'Bye.' },
+  { date: '27/03/2024', time: '20:49', sender: 'mariuszjunker2019', content: 'Bye. Don\'t forget about the certificate, it\'s important to me.' },
+  { date: '27/03/2024', time: '20:50', sender: 'Ula Cholewińska', content: 'Mr. Smarty-pants goes partying and comes back cheerful... and has a problem about God knows what.' },
+  { date: '27/03/2024', time: '20:51', sender: 'Ula Cholewińska', content: 'I will forget. Please tell me everything you need it for. If you want to play games, I can too, please do.' },
+  { date: '27/03/2024', time: '21:18', sender: 'Ula Cholewińska', content: 'Certain things are important to me too, and yet you completely don\'t care... You know what, don\'t write anything else to me today because you\'ve already ruined my mood.' },
+  { date: '27/03/2024', time: '21:20', sender: 'mariuszjunker2019', content: 'But I\'m not playing games. If you, not for the first time, do things after the fact, do I not have the right to ask for my daughter\'s certificate? Ula, you really take me for an idiot. It\'s not even about that anymore, just let it go. Do I ever make things difficult for you? Never. But you blame me, and even the message about partying... I went out once for 2 hours with my brother, for God\'s sake. Apparently, I have no right to anything anymore. And despite everything, I don\'t react nervously. Okay, don\'t send it if it\'s such a big problem. We\'ll talk after the holidays when we see each other. I have no intention of hiding anything and rest assured, I\'re not doing anything that could harm you. You decide how you\'d rather talk, or if you want to keep pointing fingers and blaming me. You\'re not the only one who finds it hard, and I feel like I\'m pure evil because I always hear hurtful words from you. But I\'ll get through it on my own. And you keep thinking and blaming only me. In your eyes, I always was and always will be a nobody. You prefer to twist my efforts and sacrifices into a bad light. I know you, Ula. You have no idea how much you hurt me, and you\'re the only person who can have a positive influence on me. It\'s a shame because you demand so much, but look how you behave. Think about that instead of writing this nonsense, because you can\'t control yourself. If I wanted you to be unhappy, I would behave completely differently. You say I\'m the worst, but look at how you behave. Believe me, I try, despite everything. But for you, it\'s just another message from a junkie and a bum, I\'m sure. I\'m speechless. I\'m done, there\'s no point.' },
+  { date: '27/03/2024', time: '21:21', sender: 'mariuszjunker2019', content: 'Sorry, I won\'t write anymore.' },
+  { date: '27/03/2024', time: '21:27', sender: 'Ula Cholewińska', content: 'Ffs. What is your problem with me?! I\'m asking again?! I informed you, and I\'m going to talk about it at the nursery tomorrow. I got the email that I was accepted to the course 4 hours ago. What "after the fact"?! Explain to me what is "after the fact"??? And do I have a right to anything?? I see it\'s a huge problem that I\'m going to school. you have some nerve, really.' },
+  { date: '27/03/2024', time: '21:28', sender: 'Ula Cholewińska', content: 'Do I have to ask your permission for something, because I don\'t understand? Maybe I should ask if I have the right to breathe? It\'s a shame you\'re not so eager for other things.' },
+  { date: '27/03/2024', time: '21:29', sender: 'Ula Cholewińska', content: 'You are shameless, and quite a lot.' },
+  { date: '27/03/2024', time: '21:29', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '27/03/2024', time: '21:29', sender: 'Ula Cholewińska', content: 'And what\'s the problem here?' },
+  { date: '27/03/2024', time: '21:29', sender: 'mariuszjunker2019', content: 'This is how you informed me.' },
+  { date: '27/03/2024', time: '21:29', sender: 'Ula Cholewińska', content: 'She goes every Thursday.' },
+  { date: '27/03/2024', time: '21:30', sender: 'Ula Cholewińska', content: 'Now she will go one extra day. Were you born yesterday or do you have memory loss?' },
+  { date: '27/03/2024', time: '21:30', sender: 'mariuszjunker2019', content: 'Ula, you wrote to me that it would be 2 days.' },
+  { date: '27/03/2024', time: '21:30', sender: 'Ula Cholewińska', content: 'I see. And do you see a mistake, because I still don\'t understand.' },
+  { date: '27/03/2024', time: '21:30', sender: 'mariuszjunker2019', content: 'Never mind, have it your way.' },
+  { date: '27/03/2024', time: '21:31', sender: 'Ula Cholewińska', content: 'She\'s going to the nursery tomorrow, and from next week I\'ll arrange the two days.' },
+  { date: '27/03/2024', time: '21:31', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '27/03/2024', time: '21:31', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '27/03/2024', time: '21:31', sender: 'Ula Cholewińska', content: 'You write yesterday that you\'ll show up next week, and now suddenly there\'s a problem because you suddenly feel like visiting us.' },
+  { date: '27/03/2024', time: '21:32', sender: 'Ula Cholewińska', content: 'Just like you wrote to me yesterday that you would only come next week. I had to guess that too because you didn\'t write to me straight away.' },
+  { date: '27/03/2024', time: '21:32', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '27/03/2024', time: '21:32', sender: 'Ula Cholewińska', content: 'Maybe look at your own behavior first.' },
+  { date: '27/03/2024', time: '21:34', sender: 'Ula Cholewińska', content: 'If you suggest a meeting, I usually don\'t refuse. After the number of times you\'ve stood us up, I will never beg you for a meeting. You should know and figure that out.' },
+  { date: '27/03/2024', time: '21:35', sender: 'mariuszjunker2019', content: 'I am looking, and you are being unfair.' },
+  { date: '27/03/2024', time: '21:40', sender: 'mariuszjunker2019', content: 'Because what? I\'ll list the times in a moment because you\'re making things up. It\'s me who has been begging for a month. I see things are better. I also do what you ask, and I help without wanting anything in return. Am I so hopeless? I feel sick. Conversations with you always end like this. Thanks for letting me eat and cool down after work. Let\'s just leave it. Just tell me which day I should come. That\'s enough for today.' },
+  { date: '27/03/2024', time: '21:45', sender: 'Ula Cholewińska', content: 'I can\'t take it 🤯' },
+  { date: '28/03/2024', time: '18:04', sender: 'Ula Cholewińska', content: 'Ask that friend of yours what time we\'re meeting.' },
+  { date: '28/03/2024', time: '18:05', sender: 'mariuszjunker2019', content: 'In the afternoon. I\'ll come with him, pick it up, and give you £40 in cash.' },
+  { date: '28/03/2024', time: '18:06', sender: 'mariuszjunker2019', content: 'Does that work for you? He will be working, I won\'t be. Tomorrow is my last day.' },
+  { date: '28/03/2024', time: '18:08', sender: 'Ula Cholewińska', content: 'But why do YOU have to come? Give the guy the address and let him pick up the cake like a normal person.' },
+  { date: '28/03/2024', time: '18:09', sender: 'Ula Cholewińska', content: 'I have never heard of such a crazy idea.' },
+  { date: '28/03/2024', time: '18:09', sender: 'mariuszjunker2019', content: 'Because he asked me and I agreed, no problem. Cool, you can just hand it to me at the door.' },
+  { date: '28/03/2024', time: '18:10', sender: 'Ula Cholewińska', content: 'You must have zero respect, asking me to make a cake for some new Madzia of yours. That\'s why you were pretending you wanted to see us. And then probably a scene about nothing.' },
+  { date: '28/03/2024', time: '18:11', sender: 'mariuszjunker2019', content: 'And so it begins. This will be the last cake I arrange for you. If you don\'t want to, you don\'t even have to make it.' },
+  { date: '28/03/2024', time: '18:12', sender: 'mariuszjunker2019', content: 'I don\'t want to listen to this nonsense.' },
+  { date: '28/03/2024', time: '18:13', sender: 'Ula Cholewińska', content: 'And what is "afternoon time" supposed to mean? I asked for a time. Listen, you didn\'t want to see us, and now some weird stunts. Did you even think this through?' },
+  { date: '28/03/2024', time: '18:13', sender: 'mariuszjunker2019', content: 'I didn\'t want to? Ula, really, what\'s your problem? Yesterday you said we\'re not seeing each other.' },
+  { date: '28/03/2024', time: '18:14', sender: 'mariuszjunker2019', content: 'What time are you making it? Is 5 or 6 pm okay?' },
+  { date: '28/03/2024', time: '18:14', sender: 'mariuszjunker2019', content: 'If so, we\'ll be there then.' },
+  { date: '28/03/2024', time: '18:15', sender: 'Ula Cholewińska', content: '"Last cake I arrange for you." Oh Jesus, because later it will be that you couldn\'t sleep at night because you were "helping me" like with your ex. Please, what kind of line is that? Did I ask you for anything?' },
+  { date: '28/03/2024', time: '18:15', sender: 'mariuszjunker2019', content: 'No, you didn\'t ask.' },
+  { date: '28/03/2024', time: '18:16', sender: 'mariuszjunker2019', content: 'It\'s normal that I want you to earn some extra money, but okay, I understand, it was unnecessary.' },
+  { date: '28/03/2024', time: '18:16', sender: 'mariuszjunker2019', content: 'If you want to fight, go ahead.' },
+  { date: '28/03/2024', time: '18:16', sender: 'mariuszjunker2019', content: 'Don\'t make the cake.' },
+  { date: '28/03/2024', time: '18:16', sender: 'Ula Cholewińska', content: 'Oh, you are so kind. It\'s a shame that it\'s because of you things are the way they are.' },
+  { date: '28/03/2024', time: '18:16', sender: 'mariuszjunker2019', content: 'No favors if that\'s how it is.' },
+  { date: '28/03/2024', time: '18:17', sender: 'mariuszjunker2019', content: 'I\'ll talk to him tomorrow.' },
+  { date: '28/03/2024', time: '18:17', sender: 'Ula Cholewińska', content: 'Have a great party 😁 ;)' },
+  { date: '28/03/2024', time: '18:17', sender: 'Ula Cholewińska', content: 'No favors.' },
+  { date: '28/03/2024', time: '18:17', sender: 'mariuszjunker2019', content: 'And I\'ll tell him what\'s up.' },
+  { date: '28/03/2024', time: '18:17', sender: 'Ula Cholewińska', content: 'You are nuts. A guy orders a cake and he comes to pick it up.' },
+  { date: '28/03/2024', time: '18:17', sender: 'mariuszjunker2019', content: 'I\'m not going anywhere.' },
+  { date: '28/03/2024', time: '18:18', sender: 'Ula Cholewińska', content: 'You always have some fucked up ideas, no kidding.' },
+  { date: '28/03/2024', time: '18:18', sender: 'mariuszjunker2019', content: 'What\'s it to you? You get paid for the job and that\'s it.' },
+  { date: '28/03/2024', time: '18:18', sender: 'Ula Cholewińska', content: 'I knew it would be like this 😂' },
+  { date: '28/03/2024', time: '18:18', sender: 'mariuszjunker2019', content: 'But relax, Ula, you always have to add your two cents.' },
+  { date: '28/03/2024', time: '18:18', sender: 'mariuszjunker2019', content: 'So what?' },
+  { date: '28/03/2024', time: '18:19', sender: 'mariuszjunker2019', content: 'Don\'t piss me off, I have more important things to do.' },
+  { date: '28/03/2024', time: '18:19', sender: 'Ula Cholewińska', content: 'You\'re right. I never want any cake to be arranged through you again.' },
+  { date: '28/03/2024', time: '18:19', sender: 'Ula Cholewińska', content: 'Thank you, good man.' },
+  { date: '28/03/2024', time: '18:19', sender: 'mariuszjunker2019', content: 'So you\'ve made up your mind.' },
+  { date: '28/03/2024', time: '18:20', sender: 'mariuszjunker2019', content: 'Have a nice evening.' },
+  { date: '28/03/2024', time: '18:20', sender: 'Ula Cholewińska', content: 'It was supposed to be the same for Konrad. If it\'s going to be such a problem with you, then thanks for your big heart. Bye for now.' },
+  { date: '28/03/2024', time: '18:20', sender: 'mariuszjunker2019', content: 'The problem is with you, I\'m fine.' },
+  { date: '28/03/2024', time: '18:21', sender: 'Ula Cholewińska', content: '😂😂😂' },
+  { date: '28/03/2024', time: '18:21', sender: 'Ula Cholewińska', content: 'Of course.' },
+  { date: '28/03/2024', time: '18:22', sender: 'mariuszjunker2019', content: 'Nice that you\'re having fun.' },
+  { date: '28/03/2024', time: '18:27', sender: 'Ula Cholewińska', content: 'Super.' },
+  { date: '30/03/2024', time: '09:09', sender: 'Ula Cholewińska', content: 'If you want, you can come tomorrow. Let me know today if so. And if not, choose which days. Monday, Wednesday, Friday we are available.' },
+  { date: '30/03/2024', time: '09:10', sender: 'mariuszjunker2019', content: 'Hey, of course I\'ll come tomorrow, thanks for changing your mind.' },
+  { date: '30/03/2024', time: '15:47', sender: 'Ula Cholewińska', content: 'Let\'s set a time.' },
+  { date: '30/03/2024', time: '15:48', sender: 'Ula Cholewińska', content: 'But not too early because I need to sleep in today.' },
+  { date: '30/03/2024', time: '15:49', sender: 'mariuszjunker2019', content: 'Whatever is convenient for you, just let me know when you wake up.' },
+  { date: '30/03/2024', time: '15:52', sender: 'Ula Cholewińska', content: 'Where will you be coming from, Dewsbury?' },
+  { date: '极', time: '15:53', sender: 'mariuszjunker2019', content: 'Yes, I\'m here all the time.' },
+  { date: '30/03/2024', time: '15:55', sender: 'Ula Cholewińska', content: 'Alright then, let\'s say 12:30 or 1:00 pm.' },
+  { date: '30/03/极', time: '15:55', sender: 'Ula Cholewińska', content: 'And don\'t eat any kebabs on the way because I\'ll be making dinner for everyone.' },
+  { date: '30/03/2024', time: '16:00', sender: '极', content: 'Okay, I\'ll make and bring tortillas for you all. I\'ll make them with garlic sauce, and for us without.' },
+  { date: '30/03/2024', time: '极', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '30/03/2024', time: '16:03', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '30/03/2024', time: '16:04', sender: 'mariuszjunker2019', content: 'Very pretty. What about Nadia?' },
+  { date: '30/03/2024', time: '16:43', sender: 'Ula Cholewińska', content: 'We came back home and her ear is hurting badly, she\'s crying.' },
+  { date: '30/03/2024', time: '16:44', sender: 'mariuszjunker极', content: 'Maybe she got a chill, the weather is treacherous now.' },
+  { date: '30/03/2024', time: '16:57', sender: 'Ula Cholewińska', content: 'Well, it was warm today, I don\'t know.' },
+  { date: '30/03/2024', time: '16:57', sender: 'Ula Cholewińska', content: 'Maybe it was from a few days ago and it just came out today.' },
+  { date: '30/03/2024', time: '16:57', sender: 'Ula Cholewińska', media: '[Media omitted]' },
+  { date: '30/03/2024', time: '16:58', sender: 'mariuszjunker2019', content: 'Cute, but she\'s growing up, hihi.' },
+  { date: '30/03/2024',极: '19:00', sender: 'mariuszjunker2019', content: 'I\'ll be there tomorrow at 12:50, that\'s when I have a bus.' },
+  { date: '30/03/2024', time: '19:01', sender: 'Ula Cholewińska', content: 'Ok' },
+  { date: '30/03/2024', time: '20:10', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '30/03/2024', time: '20:12', sender: 'Ula Cholewińska', content: 'Good, because I just realized I forgot to buy garlic 😅' },
+  { date: '30/03/2024', time: '20:13', sender: 'mariuszjunker2019', content: 'But I\'m bringing you ready-made tortillas.' },
+  { date: '30/03/2024', time: '20:13', sender: 'mariuszjunker2019', content: 'I\'ll bring you some garlic because I have fresh.' },
+  { date: '30/03/2024', time: '20:14', sender: 'Ula Cholewińska', content: 'Super.' },
+  { date: '31/03/2024', time: '12:00', sender极: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '31/03/2024', time: '12:30', sender: 'mariuszjunker2019', content: 'I\'m leaving now, I\'ll be there in about 45 minutes.' },
+  { date: '31/03/2024', time: '12:39', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '31/03/2024', time: '18:12', sender: 'mariuszjunker2019', media: '[Media omitted]' },
+  { date: '31/03/2024', time: '18:13', sender: 'Ula Cholewińska', content: 'Wouldn\'t it be better to go to Heckmondwike?' },
+  { date: '31/03/2024', time: '18:14', sender: 'U极 Cholewińska', content: 'And from there there might be another one to Dewsbury.' },
+  { date: '31/03/2024', time: '18:14', sender: 'mariuszjunker2019', content: 'Only the 268 runs from Hecky. I was waiting, and it\'s warmer in Cleckheaton 👌' },
+  { date: '31/03/2024', time: '18:15', sender: 'Ula Cholewińska', content: 'Well, you can wait here, you know.' },
+  { date: '31/03/2024', time: '极', sender: 'Ula Cholewińska', content: 'I mean, you could have come back here.' },
+  { date: '31/03/2024', time: '18:16', sender: 'mariuszjunker2019', content: 'I\'m already near the bus station, but thanks.' },
+  { date: '31/03/2024', time: '18:16', sender: 'Ula Cholewińska', content: 'Oki' },
+  { date: '31/03/2024', time: '18:17', sender: 'mariuszjunker2019', content: 'I didn\'t want to wake the little one, but thanks.' }
+        ];
+
+        // Function to render messages
+        function renderMessages() {
+            const chatContainer = document.getElementById('chatMessages');
+            let currentDate = '';
+            
+            marchMessages.forEach(message => {
+                // Skip media-only messages
+                if (message.media && !message.content) return;
+                
+                // Add date separator if date changed
+                if (message.date !== currentDate) {
+                    currentDate = message.date;
+                    const dateSeparator = document.createElement('div');
+                    dateSeparator.className = 'date-separator';
+                    dateSeparator.innerHTML = `<span>${formatDate(message.date)}</span>`;
+                    chatContainer.appendChild(dateSeparator);
+                }
+                
+                // Create message element
+                const messageEl = document.createElement('div');
+                const senderClass = message.sender === 'mariuszjunker2019' ? 'mariusz' : 'ula';
+                messageEl.className = `message ${senderClass}`;
+                
+                // Add sender name for Ula's messages
+                let senderHtml = '';
+                if (senderClass === 'ula') {
+                    senderHtml = `<div class="message-sender">${message.sender}</div>`;
+                }
+                
+                // Add message content
+                let contentHtml = '';
+                if (message.content) {
+                    contentHtml = `<div class="message-bubble">${message.content}</div>`;
+                } else if (message.media) {
+                    contentHtml = `<div class="message-bubble media-message">${message.media}</div>`;
+                }
+                
+                messageEl.innerHTML = `
+                    ${senderHtml}
+                    ${contentHtml}
+                    <div class="message-time">${message.time}</div>
+                `;
+                
+                chatContainer.appendChild(messageEl);
+            });
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Format date to be more readable
+        function formatDate(dateString) {
+            const parts = dateString.split('/');
+            const day = parts[0];
+            const month = parts[1];
+            const year = parts[2];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return `${day} ${monthNames[parseInt(month) - 1]} ${year}`;
+        }
+        
+        // Initialize chat when page loads
+        window.onload = renderMessages;
+    </script>
+</body>
+</html>

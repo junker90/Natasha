@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Health & Activity Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #4a6fa5 0%, #2c3e50 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #4a6fa5;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        h3 {
+            color: #4a6fa5;
+            margin: 15px 0 10px;
+            font-size: 1.3rem;
+        }
+        .illness-item, .activity-item, .request-item, .initiative-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .date {
+            background: #e8eeff;
+            color: #4a6fa5;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .child-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .notes {
+            background: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #4a6fa5;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        .episode-count {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 30px;
+        }
+        .methodology {
+            background: #fff8e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        .methodology h3 {
+            color: #e65100;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Child Health & Activity Summary</h1>
+            <p class="subtitle">Tracking illnesses, activities, and care for Nadia and Natasha</p>
+        </header>
+
+        <div class="content">
+            <div class="left-column">
+                <section class="illnesses">
+                    <h2>Illness Episodes</h2>
+                    
+                    <h3>Nadia</h3>
+                    <div class="illness-item">
+                        <span class="date">25-26.02.2024</span>
+                        <p><span class="child-name">Nadia</span> - Fever up to 40°C, doctor visit, antibiotic prescribed for both Nadia and Natasha (counted as one episode).</p>
+                        <div class="episode-count">Episode 1</div>
+                    </div>
+                    
+                    <div class="illness-item">
+                        <span class="date">30.03.2024</span>
+                        <p><span class="child-name">Nadia</span> - Severe ear pain and crying (second distinct episode).</p>
+                        <div class="episode-count">Episode 2</div>
+                    </div>
+                    
+                    <div class="illness-item">
+                        <span class="date">21.07.2024</span>
+                        <p><span class="child-name">Nadia</span> - "3-day sickness" during the week (third illness episode).</p>
+                        <div class="episode-count">Episode 3</div>
+                    </div>
+                    
+                    <h3>Natasha</h3>
+                    <div class="illness-item">
+                        <span class="date">26.02.2024</span>
+                        <p><span class="child-name">Natasha</span> - Antibiotic on the same day as Nadia (first episode).</p>
+                        <div class="episode-count">Episode 1</div>
+                    </div>
+                    
+                    <div class="illness-item">
+                        <span class="date">27.03.2024</span>
+                        <p><span class="child-name">Natasha</span> - Night breathlessness, inhaler 2x daily and at night; improvement after 3 days (second episode).</p>
+                        <div class="episode-count">Episode 2</div>
+                    </div>
+                    
+                    <div class="illness-item">
+                        <span class="date">21.07.2024</span>
+                        <p><span class="child-name">Natasha</span> - Morning vomiting for an hour and rising temperature; request for Nurofen/Calpol and milk (third episode).</p>
+                        <div class="episode-count">Episode 3</div>
+                    </div>
+                    
+                    <div class="notes">
+                        <p>Additional mentions: "Give allergy meds to Nadi" (allergic context, not infectious) 07.04.2024; SMS 07.08.2024 about "sick child" and fever during visit (no name specified).</p>
+                    </div>
+                </section>
+                
+                <section class="requests">
+                    <h2>Ula's Requests (Shopping/Logistics)</h2>
+                    
+                    <div class="request-item">
+                        <span class="date">26.02.2024</span>
+                        <p>Request for "6 eggs" (after a difficult day with children's fever).</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">01.04.2024</span>
+                        <p>Cheese (piece or grated), oranges for children, onion, potatoes on sale, later "blue milk"; clarification about yogurt for Nadia.</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">15.03.2024</span>
+                        <p>Check and buy diapers at Asda ("I have, I bought 5").</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">16.03.2024</span>
+                        <p>"If you could get Sudocrem for Natasha, even the small one."</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">29.06.2024 (SMS)</span>
+                        <p>Potatoes and toilet paper (Tesco/hb).</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">07.07.2024 (SMS)</span>
+                        <p>"Could you get milk on the way?"</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">12.07.2024 (TXT)</span>
+                        <p>Transfer and request for 2 packs of diapers (size 6) and milk.</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">21.07.2024 (TXT)</span>
+                        <p>Nurofen/Calpol and milk for Natasha (vomiting and fever).</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">12.03.2024</span>
+                        <p>Request to attend Nadia's parent-teacher meeting and ask specific questions (school area).</p>
+                    </div>
+                    
+                    <div class="request-item">
+                        <span class="date">22.04.2024</span>
+                        <p>"Ok, you can pick up Nadi tomorrow and on Wednesday" (coordination of pickups).</p>
+                    </div>
+                </section>
+            </div>
+            
+            <div class="right-column">
+                <section class="activities">
+                    <h2>Activity Proposals</h2>
+                    
+                    <div class="activity-item">
+                        <span class="date">02.03.2024</span>
+                        <p>Proposal to take Natasha for "play or walk" for a few hours next Sunday.</p>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <span class="date">13.03.2024</span>
+                        <p>Funfair in Cleckheaton as a surprise for Nadia ("we'll pop out, let her have fun").</p>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <span class="date">05.04.2024</span>
+                        <p>Proposal for park in Batley and joint trip with the girls (weather-dependent plan).</p>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <span class="date">15.04.2024</span>
+                        <p>Proposal for Playsoft/club in Cleckheaton for 2-3 hours one-on-one with Natasha.</p>
+                    </div>
+                </section>
+                
+                <section class="initiatives">
+                    <h2>Important Initiatives</h2>
+                    
+                    <div class="initiative-item">
+                        <span class="date">01.04.2024</span>
+                        <p>Independent shopping offer, clarification of list and organization of delivery; additionally flowers for Ula as a gesture of support and thanks after the visit.</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">03.04.2024</span>
+                        <p>Initiative "I'll get ice cream" and stop at Lidl on the way before the visit (shopping without request).</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">05.04.2024</span>
+                        <p>Planning a joint trip to the park for all four (planning initiative).</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">12.03.2024</span>
+                        <p>Attending Nadia's parent-teacher meeting and completing tasks/questions Ula asked about (practical school support).</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">22.04.2024</span>
+                        <p>Proposal and organization of picking up Nadia from school on agreed days to spend time with children peacefully.</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">08.03.2024</span>
+                        <p>Support transfer "for the girls" (250 GBP, including "50 each for clothes"), with shipping confirmation.</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">15.04.2024</span>
+                        <p>Declaration of regular weekly child support of 75 GBP and starting payments in this mode.</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">21.07.2024</span>
+                        <p>Quick response to urgent health request - purchase and delivery of Nurofen/Calpol and milk ("I have everything").</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">11.04.2024</span>
+                        <p>Independent formal actions - sending parenting plan (gov), contact with lawyer and verification of police status after incident on 10.04.</p>
+                    </div>
+                    
+                    <div class="initiative-item">
+                        <span class="date">01.04.2024</span>
+                        <p>After shopping, ensuring transport (ordering taxi) and logistical closure of the visit (time, pickup, safe entry during nap).</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+        
+        <div class="methodology">
+            <h3>Methodological Note</h3>
+            <p>Illness episodes were counted as separate when symptoms/treatment clearly differed or were separated in time; e.g., fever 25-26.02 (with antibiotic) is one episode, and Natasha's vomiting on 21.07 is a separate case; allergy and general mention of "sick child" were noted separately.</p>
+        </div>
+        
+        <footer>
+            <p>Summary of child health and activities | Last updated: August 2024</p>
+        </footer>
+    </div>
+</body>
+</html>
