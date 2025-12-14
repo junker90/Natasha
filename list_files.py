@@ -6,7 +6,6 @@ This script lists all files and directories in a specified folder.
 Usage: python list_files.py [folder_path]
 """
 
-import os
 import sys
 from pathlib import Path
 
@@ -35,16 +34,22 @@ def list_files(folder_path="."):
         print(f"Listing files in: {path}")
         print(f"{'='*80}\n")
         
-        # Get all items in the directory
+        # Get all items in the directory, sorted with directories first
         items = sorted(path.iterdir(), key=lambda x: (not x.is_dir(), x.name.lower()))
         
         if not items:
             print("(Empty directory)")
             return 0
         
-        # Separate directories and files
-        directories = [item for item in items if item.is_dir()]
-        files = [item for item in items if item.is_file()]
+        # Count and print items in a single pass
+        directories = []
+        files = []
+        
+        for item in items:
+            if item.is_dir():
+                directories.append(item)
+            else:
+                files.append(item)
         
         # Print directories first
         if directories:
