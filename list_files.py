@@ -34,22 +34,23 @@ def list_files(folder_path="."):
         print(f"Listing files in: {path}")
         print(f"{'='*80}\n")
         
-        # Get all items in the directory, sorted with directories first
-        items = sorted(path.iterdir(), key=lambda x: (not x.is_dir(), x.name.lower()))
-        
-        if not items:
-            print("(Empty directory)")
-            return 0
-        
-        # Count and print items in a single pass
+        # Collect and sort directories and files separately
         directories = []
         files = []
         
-        for item in items:
+        for item in path.iterdir():
             if item.is_dir():
                 directories.append(item)
             else:
                 files.append(item)
+        
+        if not directories and not files:
+            print("(Empty directory)")
+            return 0
+        
+        # Sort each category alphabetically (case-insensitive)
+        directories.sort(key=lambda x: x.name.lower())
+        files.sort(key=lambda x: x.name.lower())
         
         # Print directories first
         if directories:
@@ -86,7 +87,7 @@ def list_files(folder_path="."):
 
 def format_size(size_bytes):
     """
-    Format file size in human-readable format.
+    Format file size in human-readable format using binary units.
     
     Args:
         size_bytes (int): Size in bytes
@@ -94,11 +95,11 @@ def format_size(size_bytes):
     Returns:
         str: Formatted size string
     """
-    for unit in ['B', 'KB', 'MB', 'GB']:
+    for unit in ['B', 'KiB', 'MiB', 'GiB']:
         if size_bytes < 1024.0:
             return f"{size_bytes:.1f} {unit}"
         size_bytes /= 1024.0
-    return f"{size_bytes:.1f} TB"
+    return f"{size_bytes:.1f} TiB"
 
 
 def main():
