@@ -95,7 +95,13 @@ def format_size(size_bytes):
     Returns:
         str: Formatted size string
     """
-    for unit in ['B', 'KiB', 'MiB', 'GiB']:
+    # Handle bytes specially to show as integers
+    if size_bytes < 1024.0:
+        return f"{int(size_bytes)} B"
+    
+    # For larger units, use one decimal place
+    size_bytes /= 1024.0
+    for unit in ['KiB', 'MiB', 'GiB']:
         if size_bytes < 1024.0:
             return f"{size_bytes:.1f} {unit}"
         size_bytes /= 1024.0
